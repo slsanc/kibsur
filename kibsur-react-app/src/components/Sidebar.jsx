@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import ProductsList from "./ProductsList";
+import InventoryPage from "./Inventory/InventoryPage";
 
 class Sidebar extends Component{
 
@@ -15,13 +15,15 @@ class Sidebar extends Component{
                 <button style={{fontSize:30}} onClick={()=>this.expandMenu()}>☰</button>
                 {this.state.expanded &&
                     <div>
-                        <div></div>
+                        <button onClick={() => this.props.onClickSidebar(<InventoryPage/>)}>Inventory</button>
                         <br/>
-                        <button>🏬 Check a Store's Inventory</button>
+                        <button>Shipments</button>
                         <br/>
-                        <button onClick={() => this.props.onClickSidebar(<ProductsList/>)}>📦 See All Products</button>
+                        <button>Sales</button>
                         <br/>
-                        <button>🚚 Record New Shipment</button>
+                        <button>Employees</button>
+                        <br/>
+                        <button>New Location</button>
                     </div>
                 }
             </td>

@@ -10,7 +10,8 @@ class ProductsList extends Component{
     render(){
         return(
             <div>
-                <h1>List of All Products:</h1>
+                <button onClick={()=>this.props.onExit()}>x</button>
+                <h1>Inventory for Store {this.props.storeId}:</h1>
                 <br/>
                 {this.displayProducts()}
             </div>
@@ -25,7 +26,7 @@ class ProductsList extends Component{
         else {
             if ((this.state.productsList.length > 0) || (this.state.categoriesList.length > 0)) {
                 return (
-                    <table className={'striped-table'}>
+                    <table className={"striped-table"}>
                         {this.state.categoriesList.map(category => <tr>
                             <td></td>
                             <td>category.categoryName</td>
