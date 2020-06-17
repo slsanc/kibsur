@@ -6,7 +6,7 @@ class InventoryPage extends Component{
 
     state={
         currentElement: <InventoryOptions onChooseStore={(storeId)=>this.chooseStore(storeId)}/>
-    }
+    };
 
     render() {
         return(this.state.currentElement);

@@ -5,7 +5,7 @@ class ProductsList extends Component{
         productsList:[],
         categoriesList:[],
         isLoading: true
-    }
+    };
 
     render(){
         return(

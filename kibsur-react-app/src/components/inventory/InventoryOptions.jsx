@@ -6,7 +6,7 @@ class InventoryOptions extends Component {
         storesList : [{storeId: 1, adress: '123 fake rd'},
         {storeId: 2 , adress: '456 paper ln'},
         {storeId: 3 , adress: '789 sesame st'}, ]
-    }
+    };
 
     render() {
         return(

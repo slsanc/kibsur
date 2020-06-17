@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import InventoryPage from "./Inventory/InventoryPage";
-
+import InventoryPage from "./inventory/InventoryPage";
+import ShipmentsPage from "./shipments/ShipmentsPage";
 class Sidebar extends Component{
 
     state={
         expanded: false
-    }
+    };
 
     render(){
         return(
@@ -17,7 +17,7 @@ class Sidebar extends Component{
                     <div>
                         <button onClick={() => this.props.onClickSidebar(<InventoryPage/>)}>Inventory</button>
                         <br/>
-                        <button>Shipments</button>
+                        <button onClick={() => this.props.onClickSidebar(<ShipmentsPage/>)}>Shipments</button>
                         <br/>
                         <button>Sales</button>
                         <br/>
