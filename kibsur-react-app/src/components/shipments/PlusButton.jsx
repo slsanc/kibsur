@@ -19,7 +19,7 @@ class PlusButton extends Component{
                     </button>
                 </div>
                 }
-                <button onClick={() => this.expandButton()}>+ Record Additional Product in Shipment</button>
+                <button onClick={() => this.expandButton()}>+ Record Additional Shipment For This Day</button>
             </div>
         );
     }
