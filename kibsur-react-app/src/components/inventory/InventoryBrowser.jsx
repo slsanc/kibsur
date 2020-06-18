@@ -44,7 +44,7 @@ class InventoryBrowser extends Component{
 
     displayInventoryEntry(inventoryEntry) {
         return (
-            <tr>
+            <tr onclick={() => this.onClickInventoryEntry()}>
                 <td><img src={box}/></td>
                 <td>{inventoryEntry.productId}</td>
                 <td>(product name)</td>
@@ -97,6 +97,13 @@ class InventoryBrowser extends Component{
         fetch('http://localhost:8080/api/categories/' + categoryId)
             .then(response => response.json())
             .then(data => this.setState({categoriesList: data}));
+    }
+
+    onClickInventoryEntry() {
+        if(this.props.inventoryEntryClickable){
+            // open the product page
+            alert('clicked on inventory entry');
+        }
     }
 }
 
