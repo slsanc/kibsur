@@ -10,7 +10,9 @@ class InventoryBrowser extends Component{
         //each entry in inventoryEntriesAndProducts is of the form [InventoryEntry, Product].
         inventoryEntriesAndProducts:[],
         categoriesList:[{categoryId:0, categoryName:''}],
-        isLoading: true
+        isLoading: true,
+        categoryIdsChecked:[],
+        productIdsChecked:[]
     };
 
     render(){
@@ -45,11 +47,12 @@ class InventoryBrowser extends Component{
 
     displayInventoryEntry(inventoryEntry, product) {
         return (
-            <tr onclick={() => this.onClickInventoryEntry()}>
+            <tr onClick={() => this.onClickInventoryEntry()}>
+                {this.displayCheckbox(product.productId, 'product')}
                 <td><img src={box}/></td>
-                <td>{inventoryEntry.productId}</td>
+                <td>ID#{product.productId}</td>
                 <td>{product.productName}</td>
-                <td>{inventoryEntry.amountInStock}</td>
+                <td>{inventoryEntry.amountInStock} in stock</td>
                 <td>{product.productDescription}</td>
                 <td>(quantity here later)</td>
             </tr>
@@ -59,11 +62,12 @@ class InventoryBrowser extends Component{
     displayCategory(category) {
         if (category.categoryId != 1) {
             return (
-                <tr onClick={() => this.changeCategory(category.categoryId)}>
-                    <td><img src={folder}/></td>
-                    <td>{category.categoryId}</td>
-                    <td>{category.categoryName}</td>
-                    <td colSpan={3}></td>
+                <tr>
+                    {this.displayCheckbox(category.categoryId, 'category')}
+                    <td onClick={() => this.changeCategory(category.categoryId)}><img src={folder}/></td>
+                    <td onClick={() => this.changeCategory(category.categoryId)}>{category.categoryId}</td>
+                    <td onClick={() => this.changeCategory(category.categoryId)}>{category.categoryName}</td>
+                    <td onClick={() => this.changeCategory(category.categoryId)} colSpan={3}></td>
                 </tr>
             );
         }
@@ -78,7 +82,11 @@ class InventoryBrowser extends Component{
         this.updateCategoriesList(categoryId);
         this.updateInventoryEntriesAndProducts(categoryId);
         this.setState(state => {
-            return({isLoading: false , currentCategory: categoryId});
+            return({isLoading: false ,
+                currentCategory: categoryId,
+                categoryIdsChecked:[],
+                productIdsChecked:[]}
+                );
         });
     };
 
@@ -105,6 +113,37 @@ class InventoryBrowser extends Component{
             // open the product page
             alert('clicked on inventory entry');
         }
+    }
+
+    displayCheckbox(objectId, objectType) {
+        return(
+            <td>
+                <input type={'checkbox'}
+                       objectid={objectId} objecttype={objectType}
+                       onChange={this.handleClickCheckbox.bind(this)}/>
+            </td>
+        );
+    }
+
+    handleClickCheckbox(event) {
+        event.persist()
+        console.log(event);
+        //if the checkbox is checked, add the id of the object it represents to the current list of checked items.
+        //if the checkbox is unchecked, remove the id of the object it represents to the current list of checked items.
+        let listName = event.target.attributes.objecttype.value + 'IdsChecked';
+        let updatedList = this.state[listName];
+
+        console.log(listName);
+        console.log(updatedList);
+
+        if (event.target.checked){
+            updatedList.push(event.target.attributes.objectid.value);
+        }
+        else{
+            updatedList.splice(this.state[listName].indexOf(event.target.attributes.objectid.value), 1);
+        }
+
+        this.setState({[listName]: updatedList});
     }
 }
 
