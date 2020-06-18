@@ -2,43 +2,48 @@ import React, {Component} from 'react';
 
 class InventoryBrowser extends Component{
     state={
+        currentStoreId: 'all',
         currentCategory:0,
-        productsList:[],
-        categoriesList:[],
+        inventoryEntriesList:[],
+        categoriesList:[{categoryId:0, categoryName:''}],
         isLoading: true
     };
 
     render(){
         return(
             <div>
-                <button onClick={()=>this.props.onExit()}>x</button>
                 <h1>Inventory for Store {this.props.storeId}:</h1>
                 <br/>
-                {this.displayProducts()}
+                {this.displayInventory()}
             </div>
         );
     }
 
-    displayProducts() {
+    displayInventory() {
 
         if(this.state.isLoading){
             return(<h2>Loading...</h2>)
         }
         else {
-            if ((this.state.productsList.length > 0) || (this.state.categoriesList.length > 0)) {
+            if ((this.state.inventoryEntriesList.length > 0) || (this.state.categoriesList.length > 0)) {
                 return (
                     <table className={"striped-table"}>
-                        {this.state.categoriesList.map(category => <tr>
-                            <td></td>
-                            <td>category.categoryName</td>
-                            <td colSpan={2}></td>
-                        </tr>)}
-                        {this.state.productsList.map(product => <tr>
-                            <td>{product.productId}</td>
-                            <td>{product.productName}</td>
-                            <td>{product.productDescription}</td>
-                            <td>(quantity here later)</td>
-                        </tr>)}
+                        {this.state.categoriesList.map(category =>
+                            <tr onClick={()=>this.changeCategory(category.categoryId)}>
+                                <td>{category.categoryId}</td>
+                                <td>{category.categoryName}</td>
+                                <td colSpan={2}> </td>
+                            </tr>
+                        )}
+                        {this.state.inventoryEntriesList.map(inventoryEntry =>
+                            <tr>
+                                <td>{inventoryEntry.productId}</td>
+                                <td>(product name)</td>
+                                <td>{inventoryEntry.amountInStock}</td>
+                                <td>(product description)</td>
+                                <td>(quantity here later)</td>
+                            </tr>
+                        )}
                     </table>
                 );
             } else {
@@ -48,29 +53,26 @@ class InventoryBrowser extends Component{
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/api/allproducts')
-            .then(response => response.json())
-            .then(data => this.setState({productsList: data}));
-
-        this.setState({isLoading: false});
+        this.changeCategory(1);
     }
 
     changeCategory(categoryId){
-        const updatedCategoriesList = this.updateCategoriesList(categoryId);
-        const updatedProductsList = this.updateProductsList(categoryId);
-        this.setState({
-            currentCategory:categoryId,
-            productsList: updatedProductsList,
-            categoriesList: updatedCategoriesList
-        });
-    }
+        this.setState({isLoading: true});
+        this.updateCategoriesList(categoryId);
+        this.updateInventoryEntriesList(categoryId);
+        this.setState({isLoading: false});
+    };
 
-    updateProductsList(categoryId) {
-
+    updateInventoryEntriesList(categoryId){
+        fetch('http://localhost:8080/api/inventoryentries/' + this.state.currentStoreId + '/' + categoryId)
+            .then(response => response.json())
+            .then(data => this.setState({inventoryEntriesList: data}));
     }
 
     updateCategoriesList(categoryId) {
-        return undefined;
+        fetch('http://localhost:8080/api/categories/' + categoryId)
+            .then(response => response.json())
+            .then(data => this.setState({categoriesList: data}));
     }
 }
 

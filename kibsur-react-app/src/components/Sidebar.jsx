@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import InventoryPage from "./inventory/InventoryPage";
 import ShipmentsPage from "./shipments/ShipmentsPage";
 import NewCatagoryForm from "./shipments/NewCatagoryForm";
+import InventoryBrowser from "./inventory/InventoryBrowser";
 class Sidebar extends Component{
 
     state={
@@ -26,7 +27,7 @@ class Sidebar extends Component{
                         <br/>
                         <button>New Location</button>
                         <br/>
-                        <button onClick={() => this.props.onClickSidebar(<NewCatagoryForm/>)}>New Catagory</button>
+                        <button onClick={() => this.props.onClickSidebar(<InventoryBrowser/>)}>browser</button>
                     </div>
                 }
             </td>
