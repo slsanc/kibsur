@@ -39,7 +39,12 @@ public class KibsurController {
         return newProduct;
     }
 
+    @GetMapping("/categories/getparentcategoryid/{categoryId}")
+    public int findParentCategoryIdByCategoryId(@PathVariable int categoryId){
+        return categoryRepository.findParentCategoryIdByCategoryId(categoryId);
+    }
 
+    //<editor-fold desc="Mappings that return lists of categories or inventory entries">
     @GetMapping("/categories/{categoryId}")
     public List<Category> displayCategoriesByCategory(@PathVariable int categoryId){
         return categoryRepository.findCategoriesByParentCategory(categoryId);
@@ -70,6 +75,7 @@ public class KibsurController {
     public List<InventoryEntry> displayInventoryEntriesByStoreAndCategory(@PathVariable int storeId, @PathVariable int categoryId){
         return inventoryEntryRepository.findInventoryEntriesByParentCategoryAndStore(categoryId, storeId);
     }
+    //</editor-fold>
 
 
 }

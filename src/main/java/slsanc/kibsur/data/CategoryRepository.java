@@ -12,4 +12,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query(value="SELECT * FROM Categories WHERE parent_category = :parentCategory", nativeQuery = true)
     List<Category> findCategoriesByParentCategory(@Param("parentCategory") int parentCategory);
 
+    @Query(value = "SELECT parent_category FROM Categories WHERE category_id = :categoryId", nativeQuery = true)
+    Integer findParentCategoryIdByCategoryId(@Param("categoryId") int categoryId);
+
 }
