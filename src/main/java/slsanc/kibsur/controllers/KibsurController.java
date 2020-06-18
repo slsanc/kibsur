@@ -12,6 +12,7 @@ import slsanc.kibsur.models.Product;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -51,29 +52,35 @@ public class KibsurController {
     }
 
     @GetMapping("/inventoryentries/all/{categoryId}")
-    public List<InventoryEntry> displayInventoryEntriesByCategory(@PathVariable int categoryId){
+    public ArrayList<Object[]> findInventoryEntriesByCategory(@PathVariable int categoryId){
 
-        /* What we want here is a list of all inventory entries for products a particular category. For each entry we
-        get back, we want the 'amountInStock' to be the total amount in stock across all stores.
-        When we sum the amountInStock by group like this, the JpaRepository that performs the query won't return an
-        object of type List<InventoryEntry>. Instead, it returns an object of type List<Integer[]>, even if columns are
-        selected for each property of the InventoryEntry class.
-        given this limitation, I wrote the query to return a List<Integer[]> where each Integer[] contains two entries:
-        the product id and the sum of the amount in stock. The below loop converts this into the List<InventoryEntry>
-        that we want.*/
+        /* We want a ArrayList<Object[]>, with each Object[] containing an InventoryEntry object and its matching
+        Product (this was easier to implement than a hashmap). The following loop creates this for us.
+        Note that the query 'findInventoryEntriesByParentCategory' returns a List<Integer[]> where each Integer[]
+        contains two entries: the product id and the sum of the amount in stock. I couldn't find any easy way to get the
+        JpaRepository to return these as InventoryEntry objects directly, so they are converted below:*/
 
-        ArrayList<InventoryEntry> result = new ArrayList<>();
+        ArrayList<Object[]> result = new ArrayList<>();
 
         for (Integer[] integerArray : inventoryEntryRepository.findInventoryEntriesByParentCategory(categoryId)){
-            result.add(new InventoryEntry(integerArray[0], integerArray[1]));
+            Object[] newEntry = {new InventoryEntry(integerArray[0], integerArray[1]),
+                    productRepository.findById(integerArray[0])};
+            result.add(newEntry);
         }
 
         return result;
     }
 
     @GetMapping("/inventoryentries/{storeId}/{categoryId}")
-    public List<InventoryEntry> displayInventoryEntriesByStoreAndCategory(@PathVariable int storeId, @PathVariable int categoryId){
-        return inventoryEntryRepository.findInventoryEntriesByParentCategoryAndStore(categoryId, storeId);
+    public ArrayList<Object[]> findInventoryEntriesByStoreAndCategory(@PathVariable int storeId, @PathVariable int categoryId){
+
+        ArrayList<Object[]> result = new ArrayList<>();
+
+        for (InventoryEntry inventoryEntry : inventoryEntryRepository.findInventoryEntriesByParentCategoryAndStore(categoryId, storeId)){
+            Object[] newEntry = {inventoryEntry, productRepository.findById(inventoryEntry.getProductId()).get()};
+            result.add(newEntry);
+        }
+        return result;
     }
     //</editor-fold>
 

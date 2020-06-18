@@ -7,7 +7,8 @@ class InventoryBrowser extends Component{
     state={
         currentStoreId: 'all',
         currentCategory: 1,
-        inventoryEntriesList:[],
+        //each entry in inventoryEntriesAndProducts is of the form [InventoryEntry, Product].
+        inventoryEntriesAndProducts:[],
         categoriesList:[{categoryId:0, categoryName:''}],
         isLoading: true
     };
@@ -29,11 +30,11 @@ class InventoryBrowser extends Component{
             return(<h2>Loading...</h2>)
         }
         else {
-            if ((this.state.inventoryEntriesList.length > 0) || (this.state.categoriesList.length > 0)) {
+            if ((this.state.inventoryEntriesAndProducts.length > 0) || (this.state.categoriesList.length > 0)) {
                 return (
                     <table className={"striped-table"}>
                         {this.state.categoriesList.map(category => this.displayCategory(category))}
-                        {this.state.inventoryEntriesList.map(inventoryEntry => this.displayInventoryEntry(inventoryEntry))}
+                        {this.state.inventoryEntriesAndProducts.map((entry) => this.displayInventoryEntry(entry[0], entry[1]))}
                     </table>
                 );
             } else {
@@ -42,14 +43,14 @@ class InventoryBrowser extends Component{
         }
     }
 
-    displayInventoryEntry(inventoryEntry) {
+    displayInventoryEntry(inventoryEntry, product) {
         return (
             <tr onclick={() => this.onClickInventoryEntry()}>
                 <td><img src={box}/></td>
                 <td>{inventoryEntry.productId}</td>
-                <td>(product name)</td>
+                <td>{product.productName}</td>
                 <td>{inventoryEntry.amountInStock}</td>
-                <td>(product description)</td>
+                <td>{product.productDescription}</td>
                 <td>(quantity here later)</td>
             </tr>
         );
@@ -75,7 +76,7 @@ class InventoryBrowser extends Component{
     changeCategory(categoryId){
         this.setState({isLoading: true});
         this.updateCategoriesList(categoryId);
-        this.updateInventoryEntriesList(categoryId);
+        this.updateInventoryEntriesAndProducts(categoryId);
         this.setState(state => {
             return({isLoading: false , currentCategory: categoryId});
         });
@@ -87,10 +88,10 @@ class InventoryBrowser extends Component{
             .then(parentCategoryId => this.changeCategory(parentCategoryId))
     }
 
-    updateInventoryEntriesList(categoryId){
+    updateInventoryEntriesAndProducts(categoryId){
         fetch('http://localhost:8080/api/inventoryentries/' + this.state.currentStoreId + '/' + categoryId)
             .then(response => response.json())
-            .then(data => this.setState({inventoryEntriesList: data}));
+            .then(data => this.setState({inventoryEntriesAndProducts: data}));
     }
 
     updateCategoriesList(categoryId) {
