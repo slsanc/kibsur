@@ -11,12 +11,17 @@ class NewProductTypeForm extends Component {
         return (
             <div style={{backgroundColor:'silver', padding:'0.5rem'}}>
                 <button style={{align:'left'}} onClick={()=>this.props.onCloseSubForm()}>x</button>
-                <h3>Enter Information For New Product Type:</h3>
-                <label>Product Name:</label>
-                <input type={'text'} style={{width:'20%'}} name={'productName'} value={this.state.productName} onChange={this.handleChange.bind(this)}/>
-                <label>Product Description:</label>
-                <textarea maxLength={255} style={{resize:'none', width:'20%'}} name={'productDescription'} value={this.state.productDescription} onChange={this.handleChange.bind(this)}/>
-                <button onClick={()=>this.createNewProduct()}>Add Product Type</button>
+                <div style={{paddingLeft:'10%', paddingBottom:'10%'}}>
+                    <h3>Enter Information For New Product Type:</h3>
+                    <label>Product Name:</label>
+                    <input type={'text'} style={{width:'40%'}} name={'productName'} value={this.state.productName} onChange={this.handleChange.bind(this)}/>
+                    <label>Product Category:</label>
+                    <select style={{display:'inline', width:'40%', backgroundColor:'white'}}><option>[catagories go here]</option></select>
+                    <button style={{display: 'inline', marginLeft:10}}>Create New Category</button>
+                    <label>Product Description:</label>
+                    <textarea maxLength={255} style={{resize:'none', width:'40%'}} name={'productDescription'} value={this.state.productDescription} onChange={this.handleChange.bind(this)}/>
+                    <button onClick={()=>this.createNewProduct()}>Add Product Type</button>
+                </div>
             </div>
         );
     }
@@ -30,8 +35,8 @@ class NewProductTypeForm extends Component {
                 }
             )
             .then(response => response.json())
-            .then(data => console.log(data));
-        this.props.onAddShipment();
+            .then(data => this.props.onAddShipment(data));
+
     }
 
     handleChange(evt){

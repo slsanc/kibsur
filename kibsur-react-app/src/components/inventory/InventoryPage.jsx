@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import InventoryOptions from "./InventoryOptions";
-import ProductsList from "./ProductsList";
+import InventoryBrowser from "./InventoryBrowser";
 
 class InventoryPage extends Component{
 
@@ -13,7 +13,7 @@ class InventoryPage extends Component{
     }
 
     chooseStore(storeId) {
-        this.setState({currentElement:<ProductsList storeId={storeId} onExit={()=>this.returnToInventoryOptions()}/>});
+        this.setState({currentElement:<InventoryBrowser storeId={storeId} onExit={()=>this.returnToInventoryOptions()}/>});
     }
 
     returnToInventoryOptions() {

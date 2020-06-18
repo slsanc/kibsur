@@ -49,16 +49,17 @@ class NewShipmentForm extends Component {
         this.setState({currentSubForm: <PlusButton onClickOpenForm={(input)=>this.openForm(input)}/>, subFormOpen: false});
     }
 
-    addShipment() {
+    addShipment(productData) {
+        console.log(productData);
         let updatedList = this.state.newShipmentFormItemsList;
-        updatedList.push(<NewShipmentFormItem/>);
+        updatedList.push(<NewShipmentFormItem product={productData}/>);
         this.setState({newShipmentFormItemsList: updatedList});
         this.closeSubForm();
     }
 
     openForm(input) {
         let map = {"NewProductTypeForm" : NewProductTypeForm, "ProductSearchForm" : ProductSearchForm};
-        let newForm = React.createElement(map[input], {onAddShipment: ()=>this.addShipment(), onCloseSubForm: ()=>this.closeSubForm()});
+        let newForm = React.createElement(map[input], {onAddShipment: (input)=>this.addShipment(input), onCloseSubForm: ()=>this.closeSubForm()});
         this.setState({currentSubForm: newForm, subFormOpen: true});
     }
 
@@ -72,7 +73,7 @@ class NewShipmentForm extends Component {
     }
 
     displaySubmitButton() {
-        if(this.state.newShipmentFormItemsList.length > 0){
+        if((this.state.newShipmentFormItemsList.length > 0) && !this.state.subFormOpen){
             return(<button>Submit Shipments</button>);
         }
     }

@@ -21,11 +21,15 @@ public class KibsurController {
         return productRepository.allProducts();
     }
 
+    @GetMapping("/{storeId}/{categoryId}/categories")
+    public List<Product> displayCategoriesByStoreAndCategory(){
+        return productRepository.allProducts();
+    }
+
     @PostMapping("/createnew/product")
-    public int createNewProduct(@RequestBody Product newProduct){
+    public Product createNewProduct(@RequestBody Product newProduct){
         productRepository.save(newProduct);
-        /*returns the newly-created id number so it can be displayed in the "record new shipments" screen:*/
-        return newProduct.getProductId();
+        return newProduct;
     }
 
 }

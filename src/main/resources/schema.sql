@@ -54,7 +54,14 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Kibsur`.`Categories` (
   `category_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(45) NULL,
-  PRIMARY KEY (`category_id`))
+  `parent_category` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`category_id`),
+  INDEX `FK_categories_categories_idx` (`category_id` ASC, `parent_category` ASC) VISIBLE,
+  CONSTRAINT `FK_categories_categories`
+    FOREIGN KEY (`category_id` , `parent_category`)
+    REFERENCES `Kibsur`.`Categories` (`category_id` , `category_id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -83,7 +90,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Kibsur`.`Shipments` (
   `shipment_id` INT NOT NULL AUTO_INCREMENT,
   `product_id` INT UNSIGNED NOT NULL,
-  `cost` DECIMAL(8,2) NOT NULL,
+  `cost_per_unit` DECIMAL(8,2) NOT NULL,
   `number_of_units` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`shipment_id`),
   UNIQUE INDEX `shipment_id_UNIQUE` (`shipment_id` ASC) VISIBLE,
@@ -137,18 +144,18 @@ CREATE TABLE IF NOT EXISTS `Kibsur`.`Inventory` (
   `store_id` SMALLINT UNSIGNED NOT NULL,
   `product_id` INT UNSIGNED NOT NULL,
   `amount_in_stock` INT UNSIGNED NULL,
-  `retail_price` DECIMAL(8,2) NULL,
+  `retail_price` DECIMAL(8,2) NOT NULL,
   PRIMARY KEY (`store_id`, `product_id`),
   INDEX `FK_inventory_products_idx` (`product_id` ASC) VISIBLE,
   CONSTRAINT `FK_inventory_stores`
     FOREIGN KEY (`store_id`)
     REFERENCES `Kibsur`.`Stores` (`store_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_inventory_products`
     FOREIGN KEY (`product_id`)
     REFERENCES `Kibsur`.`Products` (`product_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

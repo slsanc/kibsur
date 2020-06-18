@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 
-class ProductsList extends Component{
+class InventoryBrowser extends Component{
     state={
+        currentCategory:0,
         productsList:[],
         categoriesList:[],
         isLoading: true
@@ -54,6 +55,23 @@ class ProductsList extends Component{
         this.setState({isLoading: false});
     }
 
+    changeCategory(categoryId){
+        const updatedCategoriesList = this.updateCategoriesList(categoryId);
+        const updatedProductsList = this.updateProductsList(categoryId);
+        this.setState({
+            currentCategory:categoryId,
+            productsList: updatedProductsList,
+            categoriesList: updatedCategoriesList
+        });
+    }
+
+    updateProductsList(categoryId) {
+
+    }
+
+    updateCategoriesList(categoryId) {
+        return undefined;
+    }
 }
 
-export default ProductsList;
+export default InventoryBrowser;

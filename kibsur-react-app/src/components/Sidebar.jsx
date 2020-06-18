@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import InventoryPage from "./inventory/InventoryPage";
 import ShipmentsPage from "./shipments/ShipmentsPage";
+import NewCatagoryForm from "./shipments/NewCatagoryForm";
 class Sidebar extends Component{
 
     state={
@@ -24,6 +25,8 @@ class Sidebar extends Component{
                         <button>Employees</button>
                         <br/>
                         <button>New Location</button>
+                        <br/>
+                        <button onClick={() => this.props.onClickSidebar(<NewCatagoryForm/>)}>New Catagory</button>
                     </div>
                 }
             </td>

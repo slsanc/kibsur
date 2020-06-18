@@ -2,37 +2,47 @@ import React, {Component} from 'react';
 
 class NewShipmentFormItem extends Component {
 
-    state = {shipmentItem:{}};
+    state = {
+        quantity:1,
+        costPerUnit:0
+    };
 
     render() {
         return (
             <tr style={{backgroundColor:'#abcdef' , verticalAlign:'top', textAlign:'left'}}>
-                <td style={{width:'20%'}}>
-                    <label>Item ID</label>
-                    <br/>
-                    <input type={'number'}/>
+                <td style={{width:'14%'}}>
+                    <label>Item ID:</label>
+                    {this.props.product.productId}
                 </td>
-                <td style={{width:'20%'}}>
-                    <label>Item Name</label>
-                    <br/>
-                    <input type={'text'}/>
+                <td style={{width:'14%'}}>
+                    <label>Item Description:</label>
+                    {this.props.product.productDescription}
                 </td>
-                <td style={{width:'20%'}}>
-                    <label>Quantity</label>
-                    <br/>
-                    <input type={'number'}/>
-                    <br/>
-                    <button>+</button>   <button>-</button>
+                <td style={{width:'14%'}}>
+                    <label>Item Name:</label>
+                    {this.props.product.productName}
                 </td>
-                <td  style={{width:'20%'}}>
-                    <label>Cost Per Unit</label>
+                <td style={{width:'14%'}}>
+                    <label>Number of Units:</label>
+                    <input type={'number'} min={1} name={'quantity'} value={this.state.quantity} onChange={this.handleChange.bind(this)}/>
                 </td>
-                <td  style={{width:'20%'}}>
+                <td  style={{width:'14%'}}>
+                    <label>Cost Per Unit:</label>
+                    <input type={'number'} min={0} step={0.01} name={'costPerUnit'} value={this.state.costPerUnit} onChange={this.handleChange.bind(this)}/>
+                </td>
+                <td  style={{width:'14%'}}>
                     <label>Image</label>
+                </td>
+                <td style={{verticalAlign:'bottom'}}>
+                    <button>Remove</button>
                 </td>
 
             </tr>
         );
+    }
+
+    handleChange(event){
+        this.setState({[event.target.name]: event.target.value})
     }
 
 
