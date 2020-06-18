@@ -37,4 +37,7 @@ public class Category {
         this.categoryName = categoryName;
         this.parentCategory = parentCategory;
     }
+
+    public Category() {
+    }
 }

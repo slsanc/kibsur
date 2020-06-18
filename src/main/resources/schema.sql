@@ -54,13 +54,14 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Kibsur`.`Categories` (
   `category_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(45) NULL,
-  `parent_category` INT UNSIGNED NOT NULL,
+  `parent_category` INT UNSIGNED NULL,
   PRIMARY KEY (`category_id`),
-  INDEX `FK_categories_categories_idx` (`category_id` ASC, `parent_category` ASC) VISIBLE,
+  INDEX `FK_categories_categories_idx` (`parent_category` ASC) INVISIBLE,
+  UNIQUE INDEX `category_id_UNIQUE` (`category_id` ASC) VISIBLE,
   CONSTRAINT `FK_categories_categories`
-    FOREIGN KEY (`category_id` , `parent_category`)
-    REFERENCES `Kibsur`.`Categories` (`category_id` , `category_id`)
-    ON DELETE CASCADE
+    FOREIGN KEY (`parent_category`)
+    REFERENCES `Kibsur`.`Categories` (`category_id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -72,8 +73,8 @@ CREATE TABLE IF NOT EXISTS `Kibsur`.`Products` (
   `product_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `product_name` VARCHAR(45) NOT NULL,
   `product_description` VARCHAR(255) NULL,
-  `category_id` INT UNSIGNED NULL,
-  PRIMARY KEY (`product_id`),
+  `category_id` INT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`product_id`, `category_id`),
   UNIQUE INDEX `product_id_UNIQUE` (`product_id` ASC) VISIBLE,
   INDEX `FK_products_categories_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `FK_products_categories`
