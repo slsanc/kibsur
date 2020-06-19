@@ -11,6 +11,7 @@ import slsanc.kibsur.models.InventoryEntry;
 import slsanc.kibsur.models.Product;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +47,15 @@ public class KibsurController {
     }
 
     //<editor-fold desc="Mappings that return lists of categories or inventory entries">
-    @GetMapping("/categories/{categoryId}")
-    public List<Category> displayCategoriesByCategory(@PathVariable int categoryId){
-        return categoryRepository.findCategoriesByParentCategory(categoryId);
+
+    @GetMapping({"/categories", "/categories/{categoryId}"})
+    public List<Category> displayCategoriesByCategory(@PathVariable(required = false) Integer categoryId){
+        if (categoryId != null){
+            return categoryRepository.findCategoriesByParentCategory(categoryId);
+        }
+        else{
+            return categoryRepository.findAll();
+        }
     }
 
     @GetMapping("/inventoryentries/all/{categoryId}")
@@ -84,5 +91,10 @@ public class KibsurController {
     }
     //</editor-fold>
 
-
+    @PostMapping("/categories/moveto/{destination}")
+    public void moveCategories(@RequestBody List<Integer> itemsToBeMoved, @PathVariable int destination){
+        for(Integer item : itemsToBeMoved){
+            categoryRepository.moveCategory(item,destination);
+        }
+    }
 }
