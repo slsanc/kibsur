@@ -14,10 +14,10 @@ class InventoryBrowserCategoryEntry extends Component {
                                objectid={this.props.category.categoryId} objecttype='category'
                                onChange={(event)=>{this.props.onClickCheckbox(event); this.changeCheckedValue();}}/>
                     </td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category.categoryId)}><img src={folder}/></td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category.categoryId)}>{this.props.category.categoryId}</td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category.categoryId)}>{this.props.category.categoryName}</td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category.categoryId)} colSpan={3}></td>
+                    <td onClick={()=>this.props.onClickCategory(this.props.category)}><img src={folder}/></td>
+                    <td onClick={()=>this.props.onClickCategory(this.props.category)}>{this.props.category.categoryId}</td>
+                    <td onClick={()=>this.props.onClickCategory(this.props.category)}>{this.props.category.categoryName}</td>
+                    <td onClick={()=>this.props.onClickCategory(this.props.category)} colSpan={3}></td>
                 </tr>
             );
         }

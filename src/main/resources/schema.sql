@@ -58,11 +58,10 @@ CREATE TABLE IF NOT EXISTS `Kibsur`.`Categories` (
   PRIMARY KEY (`category_id`),
   INDEX `FK_categories_categories_idx` (`parent_category` ASC) INVISIBLE,
   UNIQUE INDEX `category_id_UNIQUE` (`category_id` ASC) VISIBLE,
-  UNIQUE INDEX `category_name_UNIQUE` (`category_name` ASC) VISIBLE,
   CONSTRAINT `FK_categories_categories`
     FOREIGN KEY (`parent_category`)
     REFERENCES `Kibsur`.`Categories` (`category_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

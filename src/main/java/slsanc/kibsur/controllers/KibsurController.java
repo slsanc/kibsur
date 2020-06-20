@@ -32,18 +32,25 @@ public class KibsurController {
 
     @GetMapping("/allproducts")
     public List<Product> displayAllProducts(){
-        return productRepository.allProducts();
+        return productRepository.findAll();
     }
 
+    //<editor-fold desc="Mappings for creating objects">
     @PostMapping("/createnew/product")
     public Product createNewProduct(@RequestBody Product newProduct){
         productRepository.save(newProduct);
         return newProduct;
     }
 
-    @GetMapping("/categories/getparentcategoryid/{categoryId}")
-    public int findParentCategoryIdByCategoryId(@PathVariable int categoryId){
-        return categoryRepository.findParentCategoryIdByCategoryId(categoryId);
+    @PostMapping("/createnew/category")
+    public Category createNewCategory(@RequestBody Category newCategory){
+        return(categoryRepository.save(newCategory));
+    }
+    //</editor-fold>
+
+    @GetMapping("/categories/getparentcategory/{categoryId}")
+    public Category findParentCategoryByCategoryId(@PathVariable int categoryId){
+        return categoryRepository.findParentCategoryByCategoryId(categoryId);
     }
 
     //<editor-fold desc="Mappings that return lists of categories or inventory entries">
@@ -92,9 +99,35 @@ public class KibsurController {
     //</editor-fold>
 
     @PostMapping("/categories/moveto/{destination}")
-    public void moveCategories(@RequestBody List<Integer> itemsToBeMoved, @PathVariable int destination){
-        for(Integer item : itemsToBeMoved){
-            categoryRepository.moveCategory(item,destination);
+    public int moveCategories(@RequestBody List<Integer> itemsToBeMoved, @PathVariable int destination){
+
+        /*the following code generates a list of all of the directories in which the destination file sits. It then
+         * removes these categories from the list of categories to be moved. This prevents the user from putting a file
+         * inside of itself or its children.*/
+        int currentLevel = destination;
+        ArrayList<Integer> listOfParentCategories = new ArrayList<>();
+
+        while(currentLevel != 1){
+            listOfParentCategories.add(currentLevel);
+            currentLevel = categoryRepository.findParentCategoryByCategoryId(currentLevel).getCategoryId();
         }
+
+        for(Integer item : itemsToBeMoved){
+            if(!listOfParentCategories.contains(item)){
+                categoryRepository.moveCategory(item,destination);
+            }
+        }
+
+        return (destination);
+    }
+
+    @PostMapping("/products/moveto/{destination}")
+    public int moveProducts(@RequestBody List<Integer> itemsToBeMoved, @PathVariable int destination){
+
+        for(Integer item : itemsToBeMoved){
+            productRepository.moveProduct(item,destination);
+        }
+
+        return (destination);
     }
 }

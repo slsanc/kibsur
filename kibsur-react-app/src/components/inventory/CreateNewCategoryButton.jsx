@@ -6,7 +6,8 @@ import check from '../../feather/check.svg'
 class CreateNewCategoryButton extends Component {
 
     state = {
-        dialogOpen:false
+        dialogOpen:false,
+        newCategoryName: ''
     };
 
     render() {
@@ -17,8 +18,8 @@ class CreateNewCategoryButton extends Component {
             return(
                 <div style={{display:'inline'}}>
                     <label style={{display:'inline'}}>New Folder Name:</label>
-                    <input type={'text'} style={{width:'20%', display:'inline', marginLeft: '1%'}}/>
-                    <button style={{marginLeft: '1%'}}><img src={check}/></button>
+                    <input name={'newCategoryName'} value={this.state.newCategoryName} onChange={this.handleChange.bind(this)} type={'text'} style={{width:'20%', display:'inline', marginLeft: '1%'}}/>
+                    <button style={{marginLeft: '1%'}} onClick={()=>{this.props.onClickCreateCategory(this.state.newCategoryName); this.handleClick()}}><img src={check}/></button>
                     <button style={{marginLeft: '1%'}} onClick={()=>this.handleClick()}><img src={xCircle}/></button>
                 </div>
             )
@@ -30,6 +31,10 @@ class CreateNewCategoryButton extends Component {
             let updatedDialogOpenValue = !this.state.dialogOpen;
             return({dialogOpen: updatedDialogOpenValue});
         });
+    }
+
+    handleChange(event){
+        this.setState({[event.target.name]: event.target.value})
     }
 
 }

@@ -10,14 +10,13 @@ import CreateNewCategoryButton from "./CreateNewCategoryButton";
 class InventoryBrowser extends Component{
     state={
         currentStoreId: 'all',
-        currentCategory: 1,
+        currentCategory: {},
         //each entry in inventoryEntriesAndProducts is of the form [InventoryEntry, Product].
         inventoryEntriesAndProducts:[],
         categoriesList:[{categoryId:0, categoryName:''}],
         isLoading: true,
         categoryIdsChecked:[],
         productIdsChecked:[],
-        destination:'',
     };
 
     render(){
@@ -25,8 +24,9 @@ class InventoryBrowser extends Component{
             <div>
                 <h1>Inventory for Store {this.props.storeId}:</h1>
                 <br/>
+                <h2>Current Category: {this.state.currentCategory.categoryName}</h2>
                 <button onClick={()=>this.ascendCategory()} style={{marginRight:'5%', marginLeft:'5%'}}><img src={arrowUp}/></button>
-                <CreateNewCategoryButton/>
+                <CreateNewCategoryButton onClickCreateCategory={(newCategoryName)=>this.createCategory(newCategoryName)}/>
                 {this.displayMoveCategoriesButton()}
                 {this.displayInventory()}
             </div>
@@ -42,7 +42,7 @@ class InventoryBrowser extends Component{
             if ((this.state.inventoryEntriesAndProducts.length > 0) || (this.state.categoriesList.length > 0)) {
                 return (
                     <table>
-                        {this.state.categoriesList.map(category => <InventoryBrowserCategoryEntry category={category} onClickCategory={(categoryId)=>this.changeCategory(categoryId)} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)}
+                        {this.state.categoriesList.map(category => <InventoryBrowserCategoryEntry category={category} onClickCategory={(category)=>this.changeCategory(category)} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)}
                         {this.state.inventoryEntriesAndProducts.map(entry => <InventoryBrowserProductEntry inventoryEntry={entry[0]} product={entry[1]} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)}
                     </table>
                 );
@@ -53,16 +53,16 @@ class InventoryBrowser extends Component{
     }
 
     componentDidMount() {
-        this.changeCategory(1);
+        this.changeCategory({categoryId: 1, categoryName: 'Items', parentCategory: 1});
     }
 
-    changeCategory(categoryId){
+    async changeCategory(category){
         this.setState({isLoading: true});
-        this.updateCategoriesList(categoryId);
-        this.updateInventoryEntriesAndProducts(categoryId);
+        await this.updateCategoriesList(category.categoryId);
+        await this.updateInventoryEntriesAndProducts(category.categoryId);
         this.setState(state => {
             return({isLoading: false ,
-                currentCategory: categoryId,
+                currentCategory: category,
                 categoryIdsChecked:[],
                 productIdsChecked:[]}
                 );
@@ -70,9 +70,9 @@ class InventoryBrowser extends Component{
     };
 
     ascendCategory(){
-        fetch('http://localhost:8080/api/categories/getparentcategoryid/' + this.state.currentCategory)
+        fetch('http://localhost:8080/api/categories/getparentcategory/' + this.state.currentCategory.parentCategory)
             .then(response => response.json())
-            .then(parentCategoryId => this.changeCategory(parentCategoryId))
+            .then(parentCategory => this.changeCategory(parentCategory))
     }
 
     updateInventoryEntriesAndProducts(categoryId){
@@ -111,17 +111,42 @@ class InventoryBrowser extends Component{
         }
     }
 
-    moveItems(destination) {
+    async moveItems(destination) {
 
-        let data = JSON.stringify(this.state.categoryIdsChecked);
+        console.log(JSON.stringify(this.state.categoryIdsChecked));
 
-        fetch(('http://localhost:8080/api/categories/moveto/' + destination),
+        await fetch(('http://localhost:8080/api/categories/moveto/' + destination),
             {
                 method:'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: data
+                body: JSON.stringify(this.state.categoryIdsChecked)
                 }
             )
+            .then(response=>response.json())
+            .then(data=>console.log('Success: ',data));
+
+        await fetch(('http://localhost:8080/api/products/moveto/' + destination),
+            {
+                method:'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(this.state.productIdsChecked)
+                }
+            )
+            .then(response=>response.json())
+            .then(data=>console.log('Success: ',data));
+
+        this.changeCategory(this.state.currentCategory);
+    }
+
+    async createCategory(newCategoryName) {
+
+        const response = await fetch(('http://localhost:8080/api/createnew/category'),
+            {
+                method:'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({categoryName:newCategoryName , parentCategory: this.state.currentCategory.categoryId})
+            }
+        )
 
         this.changeCategory(this.state.currentCategory);
     }
