@@ -17,7 +17,7 @@ class CreateNewCategoryButton extends Component {
         else{
             return(
                 <div style={{display:'inline'}}>
-                    <label style={{display:'inline'}}>New Folder Name:</label>
+                    <label style={{display:'inline'}}>New Category Name:</label>
                     <input name={'newCategoryName'} value={this.state.newCategoryName} onChange={this.handleChange.bind(this)} type={'text'} style={{width:'20%', display:'inline', marginLeft: '1%'}}/>
                     <button style={{marginLeft: '1%'}} onClick={()=>{this.props.onClickCreateCategory(this.state.newCategoryName); this.handleClick()}}><img src={check}/></button>
                     <button style={{marginLeft: '1%'}} onClick={()=>this.handleClick()}><img src={xCircle}/></button>

@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import slsanc.kibsur.data.CategoryRepository;
 import slsanc.kibsur.data.InventoryEntryRepository;
 import slsanc.kibsur.data.ProductRepository;
+import slsanc.kibsur.data.StoreRepository;
 import slsanc.kibsur.models.Category;
 import slsanc.kibsur.models.InventoryEntry;
 import slsanc.kibsur.models.Product;
+import slsanc.kibsur.models.Store;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.lang.reflect.Array;
@@ -30,10 +32,19 @@ public class KibsurController {
     @Autowired
     private InventoryEntryRepository inventoryEntryRepository;
 
-    @GetMapping("/allproducts")
+    @Autowired
+    private StoreRepository storeRepository;
+
+    @GetMapping("/products/all")
     public List<Product> displayAllProducts(){
         return productRepository.findAll();
     }
+
+    @GetMapping("/stores/all")
+    public List<Store> displayAllStores(){
+        return storeRepository.findAll();
+    }
+
 
     //<editor-fold desc="Mappings for creating objects">
     @PostMapping("/createnew/product")
@@ -47,11 +58,6 @@ public class KibsurController {
         return(categoryRepository.save(newCategory));
     }
     //</editor-fold>
-
-    @GetMapping("/categories/getparentcategory/{categoryId}")
-    public Category findParentCategoryByCategoryId(@PathVariable int categoryId){
-        return categoryRepository.findParentCategoryByCategoryId(categoryId);
-    }
 
     //<editor-fold desc="Mappings that return lists of categories or inventory entries">
 
@@ -96,8 +102,14 @@ public class KibsurController {
         }
         return result;
     }
+
+    @GetMapping("/categories/getparentcategory/{categoryId}")
+    public Category findParentCategoryByCategoryId(@PathVariable int categoryId){
+        return categoryRepository.findParentCategoryByCategoryId(categoryId);
+    }
     //</editor-fold>
 
+    //<editor-fold desc="mappings for moving categories and products to different categories">
     @PostMapping("/categories/moveto/{destination}")
     public int moveCategories(@RequestBody List<Integer> itemsToBeMoved, @PathVariable int destination){
 
@@ -130,4 +142,5 @@ public class KibsurController {
 
         return (destination);
     }
+    //</editor-fold>
 }

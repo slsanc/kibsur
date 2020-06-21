@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import InventoryPage from "./inventory/InventoryPage";
 import ShipmentsPage from "./shipments/ShipmentsPage";
-import NewCatagoryForm from "./shipments/NewCatagoryForm";
 import InventoryBrowser from "./inventory/InventoryBrowser";
 class Sidebar extends Component{
 
@@ -17,7 +15,7 @@ class Sidebar extends Component{
                 <button style={{fontSize:30}} onClick={()=>this.expandMenu()}>☰</button>
                 {this.state.expanded &&
                     <div>
-                        <button onClick={() => this.props.onClickSidebar(<InventoryPage/>)}>Inventory</button>
+                        <button onClick={() => this.props.onClickSidebar(<InventoryBrowser/>)}>Inventory</button>
                         <br/>
                         <button onClick={() => this.props.onClickSidebar(<ShipmentsPage/>)}>Shipments</button>
                         <br/>
@@ -27,7 +25,7 @@ class Sidebar extends Component{
                         <br/>
                         <button>New Location</button>
                         <br/>
-                        <button onClick={() => this.props.onClickSidebar(<InventoryBrowser/>)}>browser</button>
+                        <button onClick={() => this.props.onClickSidebar(<InventoryBrowser showOnlyCategories={true}/>)}>browser</button>
                     </div>
                 }
             </td>

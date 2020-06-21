@@ -6,6 +6,7 @@ import MoveCategoriesButton from "./MoveCategoriesButton";
 import InventoryBrowserProductEntry from "./InventoryBrowserProductEntry";
 import InventoryBrowserCategoryEntry from "./InventoryBrowserCategoryEntry";
 import CreateNewCategoryButton from "./CreateNewCategoryButton";
+import StoreSelector from "./StoreSelector";
 
 class InventoryBrowser extends Component{
     state={
@@ -16,16 +17,17 @@ class InventoryBrowser extends Component{
         categoriesList:[{categoryId:0, categoryName:''}],
         isLoading: true,
         categoryIdsChecked:[],
-        productIdsChecked:[],
+        productIdsChecked:[]
     };
 
     render(){
         return(
             <div>
-                <h1>Inventory for Store {this.props.storeId}:</h1>
-                <br/>
+                {this.displayStoreSelector()}
                 <h2>Current Category: {this.state.currentCategory.categoryName}</h2>
-                <button onClick={()=>this.ascendCategory()} style={{marginRight:'5%', marginLeft:'5%'}}><img src={arrowUp}/></button>
+                <button onClick={()=>this.ascendCategory()} style={{marginRight:'5%', marginLeft:'5%'}}>
+                    <img src={arrowUp}/>
+                </button>
                 <CreateNewCategoryButton onClickCreateCategory={(newCategoryName)=>this.createCategory(newCategoryName)}/>
                 {this.displayMoveCategoriesButton()}
                 {this.displayInventory()}
@@ -34,7 +36,6 @@ class InventoryBrowser extends Component{
     }
 
     displayInventory() {
-
         if(this.state.isLoading){
             return(<h2>Loading...</h2>)
         }
@@ -42,8 +43,8 @@ class InventoryBrowser extends Component{
             if ((this.state.inventoryEntriesAndProducts.length > 0) || (this.state.categoriesList.length > 0)) {
                 return (
                     <table>
-                        {this.state.categoriesList.map(category => <InventoryBrowserCategoryEntry category={category} onClickCategory={(category)=>this.changeCategory(category)} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)}
-                        {this.state.inventoryEntriesAndProducts.map(entry => <InventoryBrowserProductEntry inventoryEntry={entry[0]} product={entry[1]} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)}
+                        {this.displayCategories()}
+                        {this.displayInventoryEntries()}
                     </table>
                 );
             } else {
@@ -106,7 +107,7 @@ class InventoryBrowser extends Component{
     }
 
     displayMoveCategoriesButton() {
-        if ((this.state.categoryIdsChecked.length > 0) || (this.state.productIdsChecked.length > 0)){
+        if (((this.state.categoryIdsChecked.length > 0) || (this.state.productIdsChecked.length > 0)) && (!this.props.showOnlyCategories)){
             return(<MoveCategoriesButton onClickMoveButton={(destination)=>this.moveItems(destination)}/>);
         }
     }
@@ -149,6 +150,38 @@ class InventoryBrowser extends Component{
         )
 
         this.changeCategory(this.state.currentCategory);
+    }
+
+
+    handleSelectStore(event) {
+        event.persist();
+        this.setState({currentStoreId: event.target.value});
+        this.changeCategory(this.state.currentCategory);
+    }
+
+    displayStoreSelector() {
+        if(!this.props.showOnlyCategories){
+            return(
+                <div>
+                <StoreSelector onChangeStore={this.handleSelectStore.bind(this)}/>
+                <br/>
+                </div>
+            );
+        }
+    }
+
+    displayInventoryEntries() {
+        if(!this.props.showOnlyCategories){
+            return(
+                this.state.inventoryEntriesAndProducts.map(entry => <InventoryBrowserProductEntry inventoryEntry={entry[0]} product={entry[1]} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)
+            );
+        }
+    }
+
+    displayCategories() {
+        return(
+            this.state.categoriesList.map(category => <InventoryBrowserCategoryEntry category={category} onClickCategory={(category)=>this.changeCategory(category)} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)
+        );
     }
 }
 
