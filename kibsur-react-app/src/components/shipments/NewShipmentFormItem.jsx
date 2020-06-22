@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class NewShipmentFormItem extends Component {
 
     state = {
-        quantity:1,
+        numberOfUnits:1,
         costPerUnit:0
     };
 
@@ -24,7 +24,7 @@ class NewShipmentFormItem extends Component {
                 </td>
                 <td style={{width:'14%'}}>
                     <label>Number of Units:</label>
-                    <input type={'number'} min={1} name={'quantity'} value={this.state.quantity} onChange={this.handleChange.bind(this)}/>
+                    <input type={'number'} min={1} name={'numberOfUnits'} value={this.state.numberOfUnits} onChange={this.handleChange.bind(this)}/>
                 </td>
                 <td  style={{width:'14%'}}>
                     <label>Cost Per Unit:</label>

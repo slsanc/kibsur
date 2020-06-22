@@ -3,6 +3,7 @@ import NewShipmentFormItem from "./NewShipmentFormItem";
 import PlusButton from "./PlusButton";
 import NewProductTypeForm from "./NewProductTypeForm";
 import ProductSearchForm from "./ProductSearchForm";
+import StoreSelector from "../inventory/StoreSelector";
 
 class NewShipmentForm extends Component {
 
@@ -10,9 +11,8 @@ class NewShipmentForm extends Component {
         newShipmentFormItemsList: [],
         currentSubForm: <PlusButton onClickOpenForm={(input)=>this.openForm(input)}/>,
         subFormOpen: false,
-        storesList : [{storeId: 1, adress: '123 fake rd'},
-            {storeId: 2 , adress: '456 paper ln'},
-            {storeId: 3 , adress: '789 sesame st'}, ]
+        currentStoreId: '1',
+        dateOfShipment: undefined
     };
 
     render(){
@@ -22,11 +22,9 @@ class NewShipmentForm extends Component {
                 <button onClick={()=>this.props.onExit()}>x</button>
                 <br/>
                 <h3 style={{display:'inline'}}>Shipments received by store location at </h3>
-                <select style={{width: '20%', display:'inline'}}>
-                    {this.state.storesList.map(store => <option>{store.adress}</option>)}
-                </select>
+                <StoreSelector onChangeStore={this.handleChange.bind(this)} showOptionForAll={false} message={''}/>
                 <h3  style={{display:'inline'}}> on </h3>
-                <input type={'date'} style={{width: '20%', display:'inline'}}/>
+                <input type={'date'} name={'dateOfShipment'} value={this.state.dateOfShipment} onChange={this.handleChange.bind(this)} style={{width: '20%', display:'inline'}}/>
                 <table>
                     {this.state.newShipmentFormItemsList.map(newShipmentFormItem => newShipmentFormItem)}
                 </table>
@@ -74,8 +72,24 @@ class NewShipmentForm extends Component {
 
     displaySubmitButton() {
         if((this.state.newShipmentFormItemsList.length > 0) && !this.state.subFormOpen){
-            return(<button>Submit Shipments</button>);
+            return(<button onClick={this.submitShipments.bind(this)}>Submit Shipments</button>);
         }
+    }
+
+    submitShipments() {
+
+        let newShipmentsList = [];
+
+        for(let item of this.state.newShipmentFormItemsList){
+            newShipmentsList.push({productId: item.props.productId, costPerUnit: item.state.costPerUnit, numberOfUnits: item.state.numberOfUnits, storeId: this.state.currentStoreId});
+        }
+
+        alert(JSON.stringify(newShipmentsList));
+    }
+
+    handleChange(event){
+        event.persist();
+        this.setState({[event.target.name]:event.target.value});
     }
 }
 

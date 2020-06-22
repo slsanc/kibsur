@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import folder from '../../feather/folder.svg';
 import box from '../../feather/box.svg';
+import chevronsRight from '../../feather/chevrons-right.svg'
 import arrowUp from '../../feather/arrow-up.svg'
-import MoveCategoriesButton from "./MoveCategoriesButton";
+import CategorySelector from "./CategorySelector";
 import InventoryBrowserProductEntry from "./InventoryBrowserProductEntry";
 import InventoryBrowserCategoryEntry from "./InventoryBrowserCategoryEntry";
 import CreateNewCategoryButton from "./CreateNewCategoryButton";
@@ -23,6 +24,7 @@ class InventoryBrowser extends Component{
     render(){
         return(
             <div>
+                {this.displayMessage()}
                 {this.displayStoreSelector()}
                 <h2>Current Category: {this.state.currentCategory.categoryName}</h2>
                 <button onClick={()=>this.ascendCategory()} style={{marginRight:'5%', marginLeft:'5%'}}>
@@ -108,7 +110,7 @@ class InventoryBrowser extends Component{
 
     displayMoveCategoriesButton() {
         if (((this.state.categoryIdsChecked.length > 0) || (this.state.productIdsChecked.length > 0)) && (!this.props.showOnlyCategories)){
-            return(<MoveCategoriesButton onClickMoveButton={(destination)=>this.moveItems(destination)}/>);
+            return(<CategorySelector message={'Move Selected To Category:'} buttonImage={chevronsRight} onClickButton={(destination)=>this.moveItems(destination)}/>);
         }
     }
 
@@ -141,15 +143,22 @@ class InventoryBrowser extends Component{
 
     async createCategory(newCategoryName) {
 
-        const response = await fetch(('http://localhost:8080/api/createnew/category'),
+        await fetch(('http://localhost:8080/api/createnew/category'),
             {
                 method:'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({categoryName:newCategoryName , parentCategory: this.state.currentCategory.categoryId})
-            }
-        )
+            })
+            .then(response=>response.json())
+            .then(data=>console.log(data));
 
-        this.changeCategory(this.state.currentCategory);
+        if(typeof this.props.onCreateCategory == 'function'){
+            this.props.onCreateCategory();
+        }
+        else{
+            this.changeCategory(this.state.currentCategory);
+        }
+
     }
 
 
@@ -163,7 +172,7 @@ class InventoryBrowser extends Component{
         if(!this.props.showOnlyCategories){
             return(
                 <div>
-                <StoreSelector onChangeStore={this.handleSelectStore.bind(this)}/>
+                <StoreSelector showOptionForAll={true} onChangeStore={this.handleSelectStore.bind(this)} message={'See inventory for store: '}/>
                 <br/>
                 </div>
             );
@@ -182,6 +191,12 @@ class InventoryBrowser extends Component{
         return(
             this.state.categoriesList.map(category => <InventoryBrowserCategoryEntry category={category} onClickCategory={(category)=>this.changeCategory(category)} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)
         );
+    }
+
+    displayMessage() {
+        if(this.props.message){
+            return(<h2>{this.props.message}</h2>);
+        }
     }
 }
 

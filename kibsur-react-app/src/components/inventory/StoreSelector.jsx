@@ -11,7 +11,7 @@ class StoreSelector extends Component {
         if(this.state.isLoading){
             return(
                 <div>
-                <h1 style={{display:'inline'}}>See inventory for store: </h1>
+                <h1 style={{display:'inline'}}>{this.props.message}</h1>
                 <select><option>Loading</option></select>
                 </div>
             );
@@ -19,9 +19,9 @@ class StoreSelector extends Component {
         else{
             return(
                 <div>
-                <h1 style={{display:'inline'}}>See inventory for store: </h1>
-                <select style={{display:'inline', width:'min-content'}} onChange={(event)=>this.props.onChangeStore(event)}>
-                    <option value={'all'}>all stores</option>
+                <h1 style={{display:'inline'}}>{this.props.message}</h1>
+                <select name={'currentStoreId'} style={{display:'inline', width:'min-content'}} onChange={(event)=>this.props.onChangeStore(event)}>
+                    {this.showOptionForAll()}
                     {this.state.storesList.map(store=><option value={store.storeId}>{store.address} {store.city} {store.stateOrProvence}</option>)}
                 </select>
                 </div>
@@ -36,6 +36,12 @@ class StoreSelector extends Component {
             .then(data => this.setState({storesList:data}));
 
         this.setState({isLoading: false});
+    }
+
+    showOptionForAll() {
+        if(this.props.showOptionForAll){
+            return(<option value={'all'}>all stores</option>);
+        }
     }
 }
 

@@ -1,21 +1,21 @@
 import React, {Component} from 'react';
 
-class MoveCategoriesButton extends Component {
+class CategorySelector extends Component {
 
     state = {
         listOfAllCategories:[],
         loading: true,
-        destination: 1
+        selectedCategory: 1
     };
 
     render() {
         return (
             <div>
-                <h4 style={{display: 'inline'}}>Move Selected To Category:</h4>
-                <select style={{display: 'inline', width: '20%', marginLeft:'1%', marginRight:'1%',}} onChange={this.handleChangeDestination.bind(this)}>
+                <h4 style={{display: 'inline'}}>{this.props.message}</h4>
+                <select name={'categoryId'} style={{display: 'inline', width: '20%', marginLeft:'1%', marginRight:'1%', backgroundColor:'white'}} onChange={this.props.passesCategoryToParent ? event=>this.props.handleChangeSelection(event) : this.handleChangeSelection.bind(this)}>
                     {this.displayOptions()}
                 </select>
-                <button onClick={()=>this.props.onClickMoveButton(this.state.destination)}>Move</button>
+                <button onClick={()=>this.props.onClickButton(this.state.selectedCategory)}><img src={this.props.buttonImage}/></button>
             </div>
         );
     }
@@ -36,10 +36,10 @@ class MoveCategoriesButton extends Component {
         }
     }
 
-    handleChangeDestination(event){
+    handleChangeSelection(event){
         event.persist();
-        this.setState({destination: Number(event.target.value)});
+        this.setState({selectedCategory: Number(event.target.value)});
     }
 }
 
-export default MoveCategoriesButton;
+export default CategorySelector;

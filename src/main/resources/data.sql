@@ -3,7 +3,7 @@
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `Kibsur`;
-INSERT INTO `Kibsur`.`Stores` (`store_id`, `address`, `city`, `state_or_provence`, `postal_code`) VALUES (1, '123 fake st', 'Springfield', 'IN', NULL);
+INSERT INTO `Kibsur`.`Stores` (`store_id`, `address`, `city`, `state_or_provence`, `postal_code`) VALUES (1, '234 fake st', 'Springfield', 'IN', NULL);
 INSERT INTO `Kibsur`.`Stores` (`store_id`, `address`, `city`, `state_or_provence`, `postal_code`) VALUES (2, '456 lorem dr', 'St. Louis', 'MO', NULL);
 INSERT INTO `Kibsur`.`Stores` (`store_id`, `address`, `city`, `state_or_provence`, `postal_code`) VALUES (3, '890 paper ln', 'Baton Rouge', 'LA', NULL);
 INSERT INTO `Kibsur`.`Stores` (`store_id`, `address`, `city`, `state_or_provence`, `postal_code`) VALUES (4, '867 sesame st', 'New York', 'NY', NULL);

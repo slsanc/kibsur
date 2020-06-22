@@ -57,6 +57,8 @@ public class KibsurController {
     public Category createNewCategory(@RequestBody Category newCategory){
         return(categoryRepository.save(newCategory));
     }
+
+
     //</editor-fold>
 
     //<editor-fold desc="Mappings that return lists of categories or inventory entries">
