@@ -169,33 +169,37 @@ class InventoryBrowser extends Component{
     }
 
     displayStoreSelector() {
-        if(!this.props.showOnlyCategories){
+        if(!this.props.hideStoreSelector){
             return(
                 <div>
-                <StoreSelector showOptionForAll={true} onChangeStore={this.handleSelectStore.bind(this)} message={'See inventory for store: '}/>
-                <br/>
+                    <StoreSelector showOptionForAll={true} onChangeStore={this.handleSelectStore.bind(this)} message={'See inventory for store: '}/>
+                    <br/>
                 </div>
             );
         }
+
     }
 
     displayInventoryEntries() {
         if(!this.props.showOnlyCategories){
             return(
-                this.state.inventoryEntriesAndProducts.map(entry => <InventoryBrowserProductEntry inventoryEntry={entry[0]} product={entry[1]} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)
+                this.state.inventoryEntriesAndProducts.map(entry => <InventoryBrowserProductEntry onClickProduct={(product)=>this.props.onClickProduct(product)} inventoryEntry={entry[0]} product={entry[1]} onClickCheckbox={this.handleClickCheckbox.bind(this)} hideCheckbox={this.props.hideCheckbox}/>)
             );
         }
     }
 
     displayCategories() {
-        return(
-            this.state.categoriesList.map(category => <InventoryBrowserCategoryEntry category={category} onClickCategory={(category)=>this.changeCategory(category)} onClickCheckbox={this.handleClickCheckbox.bind(this)}/>)
+        return (
+            this.state.categoriesList.map(category => <InventoryBrowserCategoryEntry category={category}
+                                                                                     onClickCategory={(category) => this.changeCategory(category)}
+                                                                                     onClickCheckbox={this.handleClickCheckbox.bind(this)}
+                                                                                     hideCheckbox = {this.props.hideCheckbox}/>)
         );
     }
 
     displayMessage() {
         if(this.props.message){
-            return(<h2>{this.props.message}</h2>);
+            return(<h1>{this.props.message}</h1>);
         }
     }
 }

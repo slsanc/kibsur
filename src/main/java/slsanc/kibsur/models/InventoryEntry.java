@@ -43,10 +43,17 @@ public class InventoryEntry {
         this.retailPrice = retailPrice;
     }
 
-    public InventoryEntry(int productId, int amountInStock, int retailPrice) {
+    public InventoryEntry(int storeId, int productId, int amountInStock, int retailPrice) {
+        this.storeId = storeId;
         this.productId = productId;
         this.amountInStock = amountInStock;
         this.retailPrice = retailPrice;
+    }
+
+    public InventoryEntry(int storeId, int productId, int amountInStock) {
+        this.storeId = storeId;
+        this.productId = productId;
+        this.amountInStock = amountInStock;
     }
 
     public InventoryEntry(int productId, int amountInStock) {

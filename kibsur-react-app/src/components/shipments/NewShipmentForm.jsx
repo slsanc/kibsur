@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import NewShipmentFormItem from "./NewShipmentFormItem";
 import PlusButton from "./PlusButton";
 import NewProductTypeForm from "./NewProductTypeForm";
-import ProductSearchForm from "./ProductSearchForm";
 import StoreSelector from "../inventory/StoreSelector";
+import InventoryBrowser from "../inventory/InventoryBrowser";
 
 class NewShipmentForm extends Component {
 
     state={
-        newShipmentFormItemsList: [],
+        newShipmentFormItemsList:[],
         currentSubForm: <PlusButton onClickOpenForm={(input)=>this.openForm(input)}/>,
         subFormOpen: false,
         currentStoreId: '1',
@@ -26,7 +26,7 @@ class NewShipmentForm extends Component {
                 <h3  style={{display:'inline'}}> on </h3>
                 <input type={'date'} name={'dateOfShipment'} value={this.state.dateOfShipment} onChange={this.handleChange.bind(this)} style={{width: '20%', display:'inline'}}/>
                 <table>
-                    {this.state.newShipmentFormItemsList.map(newShipmentFormItem => newShipmentFormItem)}
+                    {this.state.newShipmentFormItemsList.map(newShipmentFormItem => newShipmentFormItem.render())}
                 </table>
                 </div>
                 <table>
@@ -47,17 +47,18 @@ class NewShipmentForm extends Component {
         this.setState({currentSubForm: <PlusButton onClickOpenForm={(input)=>this.openForm(input)}/>, subFormOpen: false});
     }
 
-    addShipment(productData) {
-        console.log(productData);
+    addShipment(product) {
+        console.log(product);
         let updatedList = this.state.newShipmentFormItemsList;
-        updatedList.push(<NewShipmentFormItem product={productData}/>);
+        updatedList.push(new NewShipmentFormItem({productId:product.productId, productName: product.productName, productDescription: product.productDescription, handleChangeInListItem: this.handleChangeInListItem.bind(this)}));
+        console.log(updatedList)
         this.setState({newShipmentFormItemsList: updatedList});
         this.closeSubForm();
     }
 
     openForm(input) {
-        let map = {"NewProductTypeForm" : NewProductTypeForm, "ProductSearchForm" : ProductSearchForm};
-        let newForm = React.createElement(map[input], {onAddShipment: (input)=>this.addShipment(input), onCloseSubForm: ()=>this.closeSubForm()});
+        let map = {"NewProductTypeForm" : NewProductTypeForm, "InventoryBrowser" : InventoryBrowser};
+        let newForm = React.createElement(map[input], {onAddShipment: (input)=>this.addShipment(input), onCloseSubForm: ()=>this.closeSubForm(), onClickProduct: (input)=>this.addShipment(input), hideStoreSelector:true , message: 'Select The Product:', hideCheckbox:true});
         this.setState({currentSubForm: newForm, subFormOpen: true});
     }
 
@@ -77,19 +78,49 @@ class NewShipmentForm extends Component {
     }
 
     submitShipments() {
+        if (this.state.dateOfShipment === undefined) {
+            alert('Please enter a date!');
+        }
+        else {
+            let newShipmentsList = [];
 
-        let newShipmentsList = [];
+            for (let item of this.state.newShipmentFormItemsList) {
+                newShipmentsList.push({
+                    productId: item.props.productId,
+                    costPerUnit: Number(item.costPerUnit),
+                    numberOfUnits: Number(item.numberOfUnits),
+                    storeId: Number(this.state.currentStoreId),
+                    date: this.state.dateOfShipment
+                });
+            }
 
-        for(let item of this.state.newShipmentFormItemsList){
-            newShipmentsList.push({productId: item.props.productId, costPerUnit: item.state.costPerUnit, numberOfUnits: item.state.numberOfUnits, storeId: this.state.currentStoreId});
+            console.log(newShipmentsList);
+
+            fetch(('http://localhost:8080/api/createnew/shipment'),
+                {
+                    method:'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(newShipmentsList)
+                }
+            )
+                .then(response=>response.json())
+                .then(data=>console.log('Success: ',data));
         }
 
-        alert(JSON.stringify(newShipmentsList));
     }
 
     handleChange(event){
         event.persist();
         this.setState({[event.target.name]:event.target.value});
+    }
+
+    handleChangeInListItem(event){
+        event.persist();
+        let updatedItemsList = this.state.newShipmentFormItemsList;
+        let indexOfItemToUpdate = updatedItemsList.findIndex(item => item.props.productId == Number(event.target.id));
+
+        updatedItemsList[indexOfItemToUpdate][event.target.name] = event.target.value;
+        this.setState( {newShipmentFormItemsList : updatedItemsList});
     }
 }
 

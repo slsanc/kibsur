@@ -3,14 +3,8 @@ package slsanc.kibsur.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import slsanc.kibsur.data.CategoryRepository;
-import slsanc.kibsur.data.InventoryEntryRepository;
-import slsanc.kibsur.data.ProductRepository;
-import slsanc.kibsur.data.StoreRepository;
-import slsanc.kibsur.models.Category;
-import slsanc.kibsur.models.InventoryEntry;
-import slsanc.kibsur.models.Product;
-import slsanc.kibsur.models.Store;
+import slsanc.kibsur.data.*;
+import slsanc.kibsur.models.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.lang.reflect.Array;
@@ -35,6 +29,10 @@ public class KibsurController {
     @Autowired
     private StoreRepository storeRepository;
 
+    @Autowired
+    private ShipmentRepository shipmentRepository;
+
+    //<editor-fold desc="Mappings for displaying all of an object type">
     @GetMapping("/products/all")
     public List<Product> displayAllProducts(){
         return productRepository.findAll();
@@ -44,6 +42,7 @@ public class KibsurController {
     public List<Store> displayAllStores(){
         return storeRepository.findAll();
     }
+    //</editor-fold>
 
 
     //<editor-fold desc="Mappings for creating objects">
@@ -58,6 +57,22 @@ public class KibsurController {
         return(categoryRepository.save(newCategory));
     }
 
+    @PostMapping("/createnew/shipment")
+    public Integer createNewShipment(@RequestBody List<Shipment> newShipments){
+
+        for(Shipment shipment : newShipments){
+            shipmentRepository.save(shipment);
+
+            if(inventoryEntryRepository.checkIfExists(shipment.getStoreId(), shipment.getProductId()) == 1){
+                inventoryEntryRepository.addToCurrentStoreInventory(shipment.getStoreId(), shipment.getProductId(), shipment.getNumberOfUnits());
+            }
+            else{
+                inventoryEntryRepository.save(new InventoryEntry(shipment.getStoreId(), shipment.getProductId(), shipment.getNumberOfUnits()));
+            }
+        }
+
+        return(0);
+    }
 
     //</editor-fold>
 

@@ -69,7 +69,7 @@ class NewProductTypeForm extends Component {
         else{
             return(
                 <div style={{marginLeft:'2%', backgroundColor:'#f2f2f2'}}>
-                    <InventoryBrowser onCreateCategory={()=>this.openOrCloseCreateCategoryDialog()} showOnlyCategories={true} message={'Create a new Category for this product:'}/>
+                    <InventoryBrowser hideCheckbox={true} onCreateCategory={()=>this.openOrCloseCreateCategoryDialog()} showOnlyCategories={true} hideStoreSelector={true} message={'Create a new Category for this product:'}/>
                 </div>
             );
         }

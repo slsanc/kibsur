@@ -2,6 +2,13 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import ShipmentsPage from "./shipments/ShipmentsPage";
 import InventoryBrowser from "./inventory/InventoryBrowser";
+import clipboard from "../feather/clipboard.svg";
+import truck from "../feather/truck.svg";
+import dollarSign from "../feather/dollar-sign.svg";
+import user from "../feather/user.svg"
+import mapPin from "../feather/map-pin.svg"
+
+
 class Sidebar extends Component{
 
     state={
@@ -10,22 +17,35 @@ class Sidebar extends Component{
 
     render(){
         return(
-            <td style={{backgroundColor:'#0366ee', textAlign:'center', padding:10,
+            <td style={{backgroundColor:'#0366ee', padding:10,
                 width: '5%', whiteSpace: "nowrap", color: 'white', fontSize: 20}}>
                 <button style={{fontSize:30}} onClick={()=>this.expandMenu()}>☰</button>
                 {this.state.expanded &&
                     <div>
-                        <button onClick={() => this.props.onClickSidebar(<InventoryBrowser/>)}>Inventory</button>
+                        <button onClick={() => this.props.onClickSidebar(<InventoryBrowser onClickProduct={()=>{return(null);}}/>)}>
+                            <img style={{verticalAlign:'middle', padding: '5%'}} src={clipboard}/>
+                            Inventory
+                        </button>
                         <br/>
-                        <button onClick={() => this.props.onClickSidebar(<ShipmentsPage/>)}>Shipments</button>
+                        <button onClick={() => this.props.onClickSidebar(<ShipmentsPage/>)}>
+                            <img style={{verticalAlign:'middle', padding: '5%'}} src={truck}/>
+                            Shipments
+                        </button>
                         <br/>
-                        <button>Sales</button>
+                        <button>
+                            <img style={{verticalAlign:'middle', padding: '5%'}} src={dollarSign}/>
+                            Sales
+                        </button>
                         <br/>
-                        <button>Employees</button>
+                        <button>
+                            <img style={{verticalAlign:'middle', padding: '5%'}} src={user}/>
+                            Employees
+                        </button>
                         <br/>
-                        <button>New Location</button>
-                        <br/>
-                        <button onClick={() => this.props.onClickSidebar(<InventoryBrowser showOnlyCategories={true}/>)}>browser</button>
+                        <button>
+                            <img style={{verticalAlign:'middle', padding: '5%'}} src={mapPin}/>
+                            Locations
+                        </button>
                     </div>
                 }
             </td>

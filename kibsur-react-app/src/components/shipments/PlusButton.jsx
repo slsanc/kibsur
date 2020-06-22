@@ -10,12 +10,12 @@ class PlusButton extends Component{
             <div>
                 {this.state.expanded &&
                 <div>
-                    <button onClick={() => this.props.onClickOpenForm("ProductSearchForm")}>
-                        The Store Has Sold This Product Before
+                    <button onClick={() => this.props.onClickOpenForm("NewProductTypeForm")}>
+                    This is a New Product
                     </button>
                     <br/>
-                    <button onClick={() => this.props.onClickOpenForm("NewProductTypeForm")}>
-                        This is a New Product
+                    <button onClick={() => this.props.onClickOpenForm("InventoryBrowser")}>
+                        The Store Has Sold This Product Before
                     </button>
                 </div>
                 }

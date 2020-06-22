@@ -23,8 +23,8 @@ public interface InventoryEntryRepository extends JpaRepository<InventoryEntry, 
             "I.product_id = P.product_id AND P.category_id = :categoryId AND I.store_id = :storeId", nativeQuery = true)
     List<InventoryEntry> findInventoryEntriesByParentCategoryAndStore(@Param("categoryId") int categoryId, @Param("storeId") int storeId);
 
-    @Query(value = "SELECT COUNT(*) FROM Inventory WHERE sore_id=:storeId AND product_id=:productId", nativeQuery = true)
-    int checkIfInventoryEntryExistsById(@Param("storeId") int storeId, @Param("productId") int productId);
+    @Query(value = "SELECT COUNT(*) FROM Inventory WHERE store_id=:storeId AND product_id=:productId", nativeQuery = true)
+    int checkIfExists(@Param("storeId") int storeId, @Param("productId") int productId);
 
 
     @Modifying

@@ -9,20 +9,31 @@ class InventoryBrowserCategoryEntry extends Component {
         if (this.props.category.categoryId != 1) {
             return (
                 <tr style={this.rowStyle()}>
-                    <td>
-                        <input type={'checkbox'}
-                               objectid={this.props.category.categoryId} objecttype='category'
-                               onChange={(event)=>{this.props.onClickCheckbox(event); this.changeCheckedValue();}}/>
-                    </td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category)}><img src={folder}/></td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category)}>{this.props.category.categoryId}</td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category)}>{this.props.category.categoryName}</td>
-                    <td onClick={()=>this.props.onClickCategory(this.props.category)} colSpan={3}></td>
+                    {this.displayCheckbox()}
+                    <td onClick={() => this.props.onClickCategory(this.props.category)}><img src={folder}/></td>
+                    <td onClick={() => this.props.onClickCategory(this.props.category)}>{this.props.category.categoryId}</td>
+                    <td onClick={() => this.props.onClickCategory(this.props.category)}>{this.props.category.categoryName}</td>
+                    <td onClick={() => this.props.onClickCategory(this.props.category)} colSpan={3}></td>
                 </tr>
             );
         }
         else{
             return null;
+        }
+    }
+
+    displayCheckbox() {
+        if(!this.props.hideCheckbox){
+            return (
+                <td>
+                    <input type={'checkbox'}
+                           objectid={this.props.category.categoryId} objecttype='category'
+                           onChange={(event) => {
+                               this.props.onClickCheckbox(event);
+                               this.changeCheckedValue();
+                           }}/>
+                </td>
+            );
         }
     }
 
