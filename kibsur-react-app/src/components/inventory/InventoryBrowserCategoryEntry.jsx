@@ -11,7 +11,7 @@ class InventoryBrowserCategoryEntry extends Component {
                 <tr style={this.rowStyle()}>
                     {this.displayCheckbox()}
                     <td onClick={() => this.props.onClickCategory(this.props.category)}><img src={folder}/></td>
-                    <td onClick={() => this.props.onClickCategory(this.props.category)}>{this.props.category.categoryId}</td>
+                    <td onClick={() => this.props.onClickCategory(this.props.category)}> </td>
                     <td onClick={() => this.props.onClickCategory(this.props.category)}>{this.props.category.categoryName}</td>
                     <td onClick={() => this.props.onClickCategory(this.props.category)} colSpan={3}></td>
                 </tr>

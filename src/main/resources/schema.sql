@@ -119,11 +119,13 @@ CREATE TABLE IF NOT EXISTS `Kibsur`.`Sales` (
   `employee_id` INT NULL,
   `store_id` INT UNSIGNED NULL,
   `amount_sold` INT NULL,
-  `price_paid_per_unit` VARCHAR(45) NULL,
+  `price_paid_per_unit` DECIMAL(8,2) NULL,
+  `product_id` INT UNSIGNED NULL,
   PRIMARY KEY (`sale_event_id`),
   UNIQUE INDEX `sale_event_id_UNIQUE` (`sale_event_id` ASC) VISIBLE,
   INDEX `FK_sales_employees_idx` (`employee_id` ASC) VISIBLE,
   INDEX `FK_sales_stores_idx` (`store_id` ASC) VISIBLE,
+  INDEX `FK_sales_products_idx` (`product_id` ASC) VISIBLE,
   CONSTRAINT `FK_sales_employees`
     FOREIGN KEY (`employee_id`)
     REFERENCES `Kibsur`.`Employees` (`employee_id`)
@@ -132,6 +134,11 @@ CREATE TABLE IF NOT EXISTS `Kibsur`.`Sales` (
   CONSTRAINT `FK_sales_stores`
     FOREIGN KEY (`store_id`)
     REFERENCES `Kibsur`.`Stores` (`store_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_sales_products`
+    FOREIGN KEY (`product_id`)
+    REFERENCES `Kibsur`.`Products` (`product_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

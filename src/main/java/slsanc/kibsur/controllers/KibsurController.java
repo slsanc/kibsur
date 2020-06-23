@@ -35,6 +35,9 @@ public class KibsurController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private SaleRepository saleRepository;
+
     //<editor-fold desc="Mappings for displaying all of an object type">
     @GetMapping("/products/all")
     public List<Product> displayAllProducts(){
@@ -50,10 +53,22 @@ public class KibsurController {
     public List<Employee> displayAllEmployees(){
         return employeeRepository.findAll();
     }
+
     //</editor-fold>
 
 
     //<editor-fold desc="Mappings for creating objects">
+    @PostMapping("/createnew/sale")
+    public Integer createNewSale(@RequestBody List<Sale> newSales) {
+        for (Sale sale : newSales) {
+            saleRepository.save(sale);
+            if ((inventoryEntryRepository.checkIfExists(sale.getStoreId(), sale.getProductId()) == 1)) {
+                inventoryEntryRepository.addToCurrentStoreInventory(sale.getStoreId(), sale.getProductId(), -(sale.getAmountSold()));
+            }
+        }
+        return 0;
+    }
+
     @PostMapping("/createnew/product")
     public Product createNewProduct(@RequestBody Product newProduct){
         productRepository.save(newProduct);

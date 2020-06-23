@@ -5,10 +5,11 @@ class NewSalesFormItem extends Component {
 
     amountSold = 1;
     pricePaidPerUnit = 0.1;
+    employeeId = 1;
 
     render() {
         return (
-            <tr style={{backgroundColor:'#abcdef' , verticalAlign:'top', textAlign:'left'}}>
+            <tr style={{backgroundColor:'#98FB98' , verticalAlign:'top', textAlign:'left'}}>
                 <td>
                     <label>Employee:</label>
                     <EmployeeSelector handleChangeSelection={(event)=>this.props.handleChangeInListItem(event)}/>
@@ -26,7 +27,7 @@ class NewSalesFormItem extends Component {
                     <input type={'number'} min={1} defaultValue={1} name={'amountSold'} id={this.id} onChange={(event)=>this.props.handleChangeInListItem(event)}/>
                 </td>
                 <td  style={{width:'14%'}}>
-                    <label>Cost Per Unit:</label>
+                    <label>Price Paid per Unit:</label>
                     <input type={'number'} min={0} step={0.01} defaultValue={0.01} name={'pricePaidPerUnit'} id={this.id} onChange={(event)=>this.props.handleChangeInListItem(event)}/>
                 </td>
                 <td  style={{width:'14%'}}>

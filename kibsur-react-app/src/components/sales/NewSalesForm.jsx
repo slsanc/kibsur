@@ -70,12 +70,12 @@ class NewSaleForm extends Component {
 
     displaySubmitButton() {
         if((this.state.newSalesFormItemsList.length > 0) && !this.state.subFormOpen){
-            return(<button onClick={this.submitShipments.bind(this)}>Submit Shipments</button>);
+            return(<button onClick={this.submitSales.bind(this)}>Submit Sales</button>);
         }
     }
 
-    submitShipments() {
-        if (this.state.dateOfShipment === undefined) {
+    submitSales() {
+        if (this.state.dateOfSale === undefined) {
             alert('Please enter a date!');
         }
         else {
@@ -83,25 +83,26 @@ class NewSaleForm extends Component {
 
             for (let item of this.state.newSalesFormItemsList) {
                 newSalesList.push({
+                    employeeId: Number(item.employeeId),
                     productId: item.props.productId,
                     costPerUnit: Number(item.costPerUnit),
                     numberOfUnits: Number(item.numberOfUnits),
                     storeId: Number(this.state.currentStoreId),
-                    date: this.state.dateOfShipment
+                    date: this.state.dateOfSale
                 });
             }
 
-            console.log(newShipmentsList);
-
-            fetch(('http://localhost:8080/api/createnew/shipment'),
+            fetch(('http://localhost:8080/api/createnew/sale'),
                 {
                     method:'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(newShipmentsList)
+                    body: JSON.stringify(newSalesList)
                 }
             )
                 .then(response=>response.json())
                 .then(data=>console.log('Success: ',data));
+
+            this.props.onExit();
         }
 
     }
@@ -113,7 +114,6 @@ class NewSaleForm extends Component {
 
     handleChangeInListItem(event){
         event.persist();
-        console.log(event);
         let updatedItemsList = this.state.newSalesFormItemsList;
         updatedItemsList[Number(event.target.id)][event.target.name] = event.target.value;
         this.setState( {newSalesFormItemsList : updatedItemsList});
