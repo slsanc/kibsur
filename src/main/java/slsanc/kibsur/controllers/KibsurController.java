@@ -32,6 +32,9 @@ public class KibsurController {
     @Autowired
     private ShipmentRepository shipmentRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     //<editor-fold desc="Mappings for displaying all of an object type">
     @GetMapping("/products/all")
     public List<Product> displayAllProducts(){
@@ -41,6 +44,11 @@ public class KibsurController {
     @GetMapping("/stores/all")
     public List<Store> displayAllStores(){
         return storeRepository.findAll();
+    }
+
+    @GetMapping("/employees/all")
+    public List<Employee> displayAllEmployees(){
+        return employeeRepository.findAll();
     }
     //</editor-fold>
 
@@ -55,6 +63,11 @@ public class KibsurController {
     @PostMapping("/createnew/category")
     public Category createNewCategory(@RequestBody Category newCategory){
         return(categoryRepository.save(newCategory));
+    }
+
+    @PostMapping("/createnew/store")
+    public Store createNewCategory(@RequestBody Store newStore){
+        return(storeRepository.save(newStore));
     }
 
     @PostMapping("/createnew/shipment")
@@ -72,6 +85,11 @@ public class KibsurController {
         }
 
         return(0);
+    }
+
+    @PostMapping("/createnew/employee")
+    public Employee createNewEmployee(@RequestBody Employee employee){
+        return (employeeRepository.save(employee));
     }
 
     //</editor-fold>

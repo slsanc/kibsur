@@ -32,11 +32,9 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Kibsur`.`Employees` (
   `employee_id` INT NOT NULL AUTO_INCREMENT,
   `home_store` INT UNSIGNED NULL,
-  `department_id` INT UNSIGNED NULL,
   `first_name` VARCHAR(20) NULL,
   `last_name` VARCHAR(30) NULL,
-  `employee_phone` VARCHAR(9) NULL,
-  `Employeescol` VARCHAR(45) NULL,
+  `employee_phone` VARCHAR(16) NULL,
   PRIMARY KEY (`employee_id`),
   UNIQUE INDEX `employee_id_UNIQUE` (`employee_id` ASC) VISIBLE,
   INDEX `FK_employees_stores_idx` (`home_store` ASC) VISIBLE,
@@ -117,7 +115,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Kibsur`.`Sales` (
   `sale_event_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `date_time` DATETIME NULL,
+  `date` DATE NULL,
   `employee_id` INT NULL,
   `store_id` INT UNSIGNED NULL,
   `amount_sold` INT NULL,

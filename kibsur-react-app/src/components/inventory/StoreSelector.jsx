@@ -20,7 +20,7 @@ class StoreSelector extends Component {
             return(
                 <div>
                 <h1 style={{display:'inline'}}>{this.props.message}</h1>
-                <select name={'currentStoreId'} style={{display:'inline', width:'min-content'}} onChange={(event)=>this.props.onChangeStore(event)}>
+                <select name={'currentStoreId'} style={{display:'inline', width:'min-content', backgroundColor:'white'}} onChange={(event)=>this.props.onChangeStore(event)}>
                     {this.showOptionForAll()}
                     {this.state.storesList.map(store=><option value={store.storeId}>{store.address} {store.city} {store.stateOrProvence}</option>)}
                 </select>

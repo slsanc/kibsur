@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
-import NewShipmentFormItem from "./NewShipmentFormItem";
-import PlusButton from "./PlusButton";
-import NewProductTypeForm from "./NewProductTypeForm";
+import NewSalesFormItem from "./NewSalesFormItem";
+import SalesPlusButton from "./SalesPlusButton";
 import StoreSelector from "../inventory/StoreSelector";
 import InventoryBrowser from "../inventory/InventoryBrowser";
+import keyIndex from 'react-key-index';
 
-class NewShipmentForm extends Component {
+class NewSaleForm extends Component {
 
     state={
-        newShipmentFormItemsList:[],
-        currentSubForm: <PlusButton onClickOpenForm={(input)=>this.openForm(input)}/>,
+        newSalesFormItemsList:[],
+        currentSubForm: <SalesPlusButton onClickOpenForm={(input)=>this.openForm(input)}/>,
         subFormOpen: false,
         currentStoreId: '1',
-        dateOfShipment: undefined
+        dateOfSale: undefined
     };
 
     render(){
@@ -21,12 +21,12 @@ class NewShipmentForm extends Component {
                 <div style={this.mainFormStyle()} id={'mainForm'}>
                 <button onClick={()=>this.props.onExit()}>x</button>
                 <br/>
-                <h3 style={{display:'inline'}}>Shipments received by store location at </h3>
+                <h3 style={{display:'inline'}}>Sales conducted by store location at </h3>
                 <StoreSelector onChangeStore={this.handleChange.bind(this)} showOptionForAll={false} message={''}/>
                 <h3  style={{display:'inline'}}> on </h3>
-                <input type={'date'} name={'dateOfShipment'} value={this.state.dateOfShipment} onChange={this.handleChange.bind(this)} style={{width: '20%', display:'inline'}}/>
+                <input type={'date'} name={'dateOfSale'} value={this.state.dateOfSale} onChange={this.handleChange.bind(this)} style={{width: '20%', display:'inline'}}/>
                 <table>
-                    {this.state.newShipmentFormItemsList.map(newShipmentFormItem => newShipmentFormItem.render())}
+                    {this.state.newSalesFormItemsList.map(function(newSalesFormItem,index) {return(<NewSalesFormItem productId={newSalesFormItem.props.productId} handleChangeInListItem={newSalesFormItem.props.handleChangeInListItem} productName={newSalesFormItem.props.productName} id={index} />);})}
                 </table>
                 </div>
                 <table>
@@ -44,21 +44,18 @@ class NewShipmentForm extends Component {
     }
 
     closeSubForm(){
-        this.setState({currentSubForm: <PlusButton onClickOpenForm={(input)=>this.openForm(input)}/>, subFormOpen: false});
+        this.setState({currentSubForm: <SalesPlusButton onClickOpenForm={(input)=>this.openForm(input)}/>, subFormOpen: false});
     }
 
-    addShipment(product) {
-        console.log(product);
-        let updatedList = this.state.newShipmentFormItemsList;
-        updatedList.push(new NewShipmentFormItem({productId:product.productId, productName: product.productName, productDescription: product.productDescription, handleChangeInListItem: this.handleChangeInListItem.bind(this)}));
-        console.log(updatedList)
-        this.setState({newShipmentFormItemsList: updatedList});
+    addSale(product) {
+        let updatedList = this.state.newSalesFormItemsList;
+        updatedList.push(new NewSalesFormItem({productId:product.productId, productName: product.productName, productDescription: product.productDescription, handleChangeInListItem: this.handleChangeInListItem.bind(this)}));
+        this.setState({newSalesFormItemsList: updatedList});
         this.closeSubForm();
     }
 
-    openForm(input) {
-        let map = {"NewProductTypeForm" : NewProductTypeForm, "InventoryBrowser" : InventoryBrowser};
-        let newForm = React.createElement(map[input], {onAddShipment: (input)=>this.addShipment(input), onCloseSubForm: ()=>this.closeSubForm(), onClickProduct: (input)=>this.addShipment(input), hideStoreSelector:true , message: 'Select The Product:', hideCheckbox:true});
+    openForm() {
+        let newForm = React.createElement(InventoryBrowser, {onCloseSubForm: ()=>this.closeSubForm(), onClickProduct: (input)=>this.addSale(input), hideStoreSelector:true , message: 'Select The Product:', hideCheckbox:true});
         this.setState({currentSubForm: newForm, subFormOpen: true});
     }
 
@@ -72,7 +69,7 @@ class NewShipmentForm extends Component {
     }
 
     displaySubmitButton() {
-        if((this.state.newShipmentFormItemsList.length > 0) && !this.state.subFormOpen){
+        if((this.state.newSalesFormItemsList.length > 0) && !this.state.subFormOpen){
             return(<button onClick={this.submitShipments.bind(this)}>Submit Shipments</button>);
         }
     }
@@ -82,10 +79,10 @@ class NewShipmentForm extends Component {
             alert('Please enter a date!');
         }
         else {
-            let newShipmentsList = [];
+            let newSalesList = [];
 
-            for (let item of this.state.newShipmentFormItemsList) {
-                newShipmentsList.push({
+            for (let item of this.state.newSalesFormItemsList) {
+                newSalesList.push({
                     productId: item.props.productId,
                     costPerUnit: Number(item.costPerUnit),
                     numberOfUnits: Number(item.numberOfUnits),
@@ -105,8 +102,6 @@ class NewShipmentForm extends Component {
             )
                 .then(response=>response.json())
                 .then(data=>console.log('Success: ',data));
-
-            this.props.onExit()
         }
 
     }
@@ -118,12 +113,11 @@ class NewShipmentForm extends Component {
 
     handleChangeInListItem(event){
         event.persist();
-        let updatedItemsList = this.state.newShipmentFormItemsList;
-        let indexOfItemToUpdate = updatedItemsList.findIndex(item => item.props.productId == Number(event.target.id));
-
-        updatedItemsList[indexOfItemToUpdate][event.target.name] = event.target.value;
-        this.setState( {newShipmentFormItemsList : updatedItemsList});
+        console.log(event);
+        let updatedItemsList = this.state.newSalesFormItemsList;
+        updatedItemsList[Number(event.target.id)][event.target.name] = event.target.value;
+        this.setState( {newSalesFormItemsList : updatedItemsList});
     }
 }
 
-export default NewShipmentForm;
+export default NewSaleForm;

@@ -7,6 +7,9 @@ import truck from "../feather/truck.svg";
 import dollarSign from "../feather/dollar-sign.svg";
 import user from "../feather/user.svg"
 import mapPin from "../feather/map-pin.svg"
+import EmployeesPage from "./employees/EmployeesPage";
+import LocationsPage from "./locations/LocationsPage";
+import SalesPage from "./sales/SalesPage";
 
 
 class Sidebar extends Component{
@@ -32,17 +35,17 @@ class Sidebar extends Component{
                             Shipments
                         </button>
                         <br/>
-                        <button>
+                        <button onClick={() => this.props.onClickSidebar(<SalesPage/>)}>
                             <img style={{verticalAlign:'middle', padding: '5%'}} src={dollarSign}/>
                             Sales
                         </button>
                         <br/>
-                        <button>
+                        <button onClick={() => this.props.onClickSidebar(<EmployeesPage/>)}>
                             <img style={{verticalAlign:'middle', padding: '5%'}} src={user}/>
                             Employees
                         </button>
                         <br/>
-                        <button>
+                        <button onClick={() => this.props.onClickSidebar(<LocationsPage/>)}>
                             <img style={{verticalAlign:'middle', padding: '5%'}} src={mapPin}/>
                             Locations
                         </button>
