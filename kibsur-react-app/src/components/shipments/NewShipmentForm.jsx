@@ -26,7 +26,7 @@ class NewShipmentForm extends Component {
                 <h3  style={{display:'inline'}}> on </h3>
                 <input type={'date'} name={'dateOfShipment'} value={this.state.dateOfShipment} onChange={this.handleChange.bind(this)} style={{width: '20%', display:'inline'}}/>
                 <table>
-                    {this.state.newShipmentFormItemsList.map(newShipmentFormItem => newShipmentFormItem.render())}
+                    {this.state.newShipmentFormItemsList.map(function(newShipmentFormItem,index) {return(<NewShipmentFormItem productId={newShipmentFormItem.props.productId} productName={newShipmentFormItem.props.productName} productDescription={newShipmentFormItem.props.productDescription} handleChangeInListItem={newShipmentFormItem.props.handleChangeInListItem} id={index} onClickRemoveButton={newShipmentFormItem.props.onClickRemoveButton}/>);})}
                 </table>
                 </div>
                 <table>
@@ -48,10 +48,8 @@ class NewShipmentForm extends Component {
     }
 
     addShipment(product) {
-        console.log(product);
         let updatedList = this.state.newShipmentFormItemsList;
-        updatedList.push(new NewShipmentFormItem({productId:product.productId, productName: product.productName, productDescription: product.productDescription, handleChangeInListItem: this.handleChangeInListItem.bind(this)}));
-        console.log(updatedList)
+        updatedList.push(new NewShipmentFormItem({productId:product.productId, productName: product.productName, productDescription: product.productDescription, handleChangeInListItem: this.handleChangeInListItem.bind(this) ,  onClickRemoveButton: this.handleRemoveListItem.bind(this)}));
         this.setState({newShipmentFormItemsList: updatedList});
         this.closeSubForm();
     }
@@ -119,9 +117,14 @@ class NewShipmentForm extends Component {
     handleChangeInListItem(event){
         event.persist();
         let updatedItemsList = this.state.newShipmentFormItemsList;
-        let indexOfItemToUpdate = updatedItemsList.findIndex(item => item.props.productId == Number(event.target.id));
+        updatedItemsList[Number(event.target.id)][event.target.name] = event.target.value;
+        this.setState( {newShipmentFormItemsList : updatedItemsList});
+    }
 
-        updatedItemsList[indexOfItemToUpdate][event.target.name] = event.target.value;
+    handleRemoveListItem(event){
+        event.persist();
+        let updatedItemsList = this.state.newShipmentFormItemsList;
+        updatedItemsList.splice(Number(event.target.id),1);
         this.setState( {newShipmentFormItemsList : updatedItemsList});
     }
 }

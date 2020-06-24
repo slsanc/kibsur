@@ -54,6 +54,16 @@ public class KibsurController {
         return employeeRepository.findAll();
     }
 
+    @GetMapping("/shipments/all")
+    public List<Shipment> displayAllShipments(){
+        return shipmentRepository.findAll();
+    }
+
+    @GetMapping("/sales/all")
+    public List<Sale> displayAllSales(){
+        return saleRepository.findAll();
+    }
+
     //</editor-fold>
 
 

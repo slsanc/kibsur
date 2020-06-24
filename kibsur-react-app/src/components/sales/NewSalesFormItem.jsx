@@ -34,7 +34,7 @@ class NewSalesFormItem extends Component {
                     <label></label>
                 </td>
                 <td style={{verticalAlign:'bottom'}}>
-                    <button>Remove</button>
+                    <button id={this.id} onClick={this.props.onClickRemoveButton}>Remove</button>
                 </td>
 
             </tr>

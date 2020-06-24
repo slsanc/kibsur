@@ -22,17 +22,17 @@ class NewShipmentFormItem extends Component {
                 </td>
                 <td style={{width:'14%'}}>
                     <label>Number of Units:</label>
-                    <input type={'number'} min={1} defaultValue={1} name={'numberOfUnits'} id={this.props.productId} onChange={(event)=>this.props.handleChangeInListItem(event)}/>
+                    <input type={'number'} min={1} defaultValue={1} name={'numberOfUnits'} id={this.id} onChange={(event)=>this.props.handleChangeInListItem(event)}/>
                 </td>
                 <td  style={{width:'14%'}}>
                     <label>Cost Per Unit:</label>
-                    <input type={'number'} min={0} step={0.01} defaultValue={0.01} name={'costPerUnit'} id={this.props.productId} onChange={(event)=>this.props.handleChangeInListItem(event)}/>
+                    <input type={'number'} min={0} step={0.01} defaultValue={0.01} name={'costPerUnit'} id={this.id} onChange={(event)=>this.props.handleChangeInListItem(event)}/>
                 </td>
                 <td  style={{width:'14%'}}>
                     <label></label>
                 </td>
                 <td style={{verticalAlign:'bottom'}}>
-                    <button>Remove</button>
+                    <button id={this.id} onClick={this.props.onClickRemoveButton}>Remove</button>
                 </td>
 
             </tr>

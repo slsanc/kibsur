@@ -15,7 +15,7 @@ class PlusButton extends Component{
                     </button>
                     <br/>
                     <button onClick={() => this.props.onClickOpenForm("InventoryBrowser")}>
-                        The Store Has Sold This Product Before
+                        This product exists in the database already.
                     </button>
                 </div>
                 }

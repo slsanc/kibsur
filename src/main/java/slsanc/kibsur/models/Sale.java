@@ -7,7 +7,7 @@ import java.sql.Date;
 @Entity
 @Table(name="Sales")
 public class Sale {
-    @Column(name="sales_event_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private int saleEventId;
+    @Column(name="sale_event_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private int saleEventId;
     @Column(name="date") private Date date;
     @Column(name="employee_id") private int employeeId;
     @Column(name="store_id") private int storeId;

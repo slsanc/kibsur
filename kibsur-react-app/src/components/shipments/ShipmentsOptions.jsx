@@ -13,7 +13,7 @@ class ShipmentsOptions extends Component {
                 </tr>
                 <tr>
                     <td>
-                        <button>
+                        <button onClick={()=>this.props.onClickPreviousShipments()}>
                             See Previous Shipments
                         </button>
                     </td>

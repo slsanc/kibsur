@@ -13,7 +13,7 @@ class SalesOptions extends Component {
                 </tr>
                 <tr>
                     <td>
-                        <button>
+                        <button  onClick={()=>this.props.onClickPreviousSales()}>
                             See Previous Sales
                         </button>
                     </td>

@@ -26,7 +26,7 @@ class NewSaleForm extends Component {
                 <h3  style={{display:'inline'}}> on </h3>
                 <input type={'date'} name={'dateOfSale'} value={this.state.dateOfSale} onChange={this.handleChange.bind(this)} style={{width: '20%', display:'inline'}}/>
                 <table>
-                    {this.state.newSalesFormItemsList.map(function(newSalesFormItem,index) {return(<NewSalesFormItem productId={newSalesFormItem.props.productId} handleChangeInListItem={newSalesFormItem.props.handleChangeInListItem} productName={newSalesFormItem.props.productName} id={index} />);})}
+                    {this.state.newSalesFormItemsList.map(function(newSalesFormItem,index) {return(<NewSalesFormItem productId={newSalesFormItem.props.productId} handleChangeInListItem={newSalesFormItem.props.handleChangeInListItem} productName={newSalesFormItem.props.productName} id={index} onClickRemoveButton={newSalesFormItem.props.onClickRemoveButton} />);})}
                 </table>
                 </div>
                 <table>
@@ -49,7 +49,7 @@ class NewSaleForm extends Component {
 
     addSale(product) {
         let updatedList = this.state.newSalesFormItemsList;
-        updatedList.push(new NewSalesFormItem({productId:product.productId, productName: product.productName, productDescription: product.productDescription, handleChangeInListItem: this.handleChangeInListItem.bind(this)}));
+        updatedList.push(new NewSalesFormItem({productId:product.productId, productName: product.productName, productDescription: product.productDescription, handleChangeInListItem: this.handleChangeInListItem.bind(this) , onClickRemoveButton: this.handleRemoveListItem.bind(this)}));
         this.setState({newSalesFormItemsList: updatedList});
         this.closeSubForm();
     }
@@ -86,7 +86,7 @@ class NewSaleForm extends Component {
                     employeeId: Number(item.employeeId),
                     productId: item.props.productId,
                     costPerUnit: Number(item.costPerUnit),
-                    numberOfUnits: Number(item.numberOfUnits),
+                    amountSold: Number(item.amountSold),
                     storeId: Number(this.state.currentStoreId),
                     date: this.state.dateOfSale
                 });
@@ -116,6 +116,13 @@ class NewSaleForm extends Component {
         event.persist();
         let updatedItemsList = this.state.newSalesFormItemsList;
         updatedItemsList[Number(event.target.id)][event.target.name] = event.target.value;
+        this.setState( {newSalesFormItemsList : updatedItemsList});
+    }
+
+    handleRemoveListItem(event){
+        event.persist();
+        let updatedItemsList = this.state.newSalesFormItemsList
+        updatedItemsList.splice(Number(event.target.id),1);
         this.setState( {newSalesFormItemsList : updatedItemsList});
     }
 }
