@@ -30,5 +30,7 @@ You can now use the app by going to your internet browser and going to http://lo
 ## License
 
 This project is licensed under the GNU General Public License - see the LICENSE file for details
-![](screenshots/inventory.png)
-![](screenshots/shipments.png)
+
+## Screenshots
+![](/screenshots/inventory.png)
+![](/screenshots/shipments.png)
