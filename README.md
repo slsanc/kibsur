@@ -1,4 +1,4 @@
-# Project Title
+# Kibsur
 
 Kibsur is a software for tracking inventory, shipments, sales, and employees across multiple store locations. Kibsur is Sumerian for "one's belongings", or "what is present".
 This project is currently under development.
@@ -30,3 +30,5 @@ You can now use the app by going to your internet browser and going to http://lo
 ## License
 
 This project is licensed under the GNU General Public License - see the LICENSE file for details
+![](screenshots/inventory.png)
+![](screenshots/shipments.png)
